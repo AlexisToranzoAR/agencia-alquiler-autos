@@ -1,0 +1,10 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "database": "${workspaceFolder:agencia-alquiler-autos}/data/database.db",
+            "name": "cars"
+        }
+    ]
+}

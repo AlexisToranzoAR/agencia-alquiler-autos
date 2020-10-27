@@ -1,0 +1,107 @@
+{% extends 'view/layout/base.html' %}
+
+{% block body %}
+{% set car = data.car %}
+
+<div class="level-left">
+    <div class="level-item">
+        <h1 class="title is-1">
+            {{"Editando club ID: " + car.id if car.id else "Nuevo club"}}
+        </h1>
+    </div>
+    <div class="level-item">
+        <span><a class="button is-link" href="/car">Cancelar</a></span>
+    </div>
+</div>
+
+<hr />
+
+<form action="/car/save" method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="id" value="{{car.id}}" readonly />
+
+    <div class="field">
+        <label class="label">Marca</label>
+        <div class="control has-icons-left">
+            <input class="input" type="text" name="brand" placeholder="Renault" value="{{car.brand}}" />
+            <span class="icon is-small is-left">
+                <i class="fas fa-signature"></i>
+            </span>
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label">Modelo</label>
+        <div class="control has-icons-left">
+            <input class="input" type="text" name="model" placeholder="Sandero" value="{{car.model}}" />
+            <span class="icon is-small is-left">
+                <i class="fas fa-compress"></i>
+            </span>
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label">Año</label>
+        <div class="control has-icons-left">
+            <input class="input" type="number" name="year" placeholder="2018" value="{{car.year}}" />
+            <span class="icon is-small is-left">
+                <i class="fas fa-compress"></i>
+            </span>
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label">Kilometraje</label>
+        <div class="control has-icons-left">
+            <input class="input" type="number" name="kms" placeholder="0" value="{{car.kms}}" />
+            <span class="icon is-small is-left">
+                <i class="fas fa-map-marked"></i>
+            </span>
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label">Color</label>
+        <div class="control has-icons-left">
+            <input class="input" type="text" name="color" placeholder="Gris" value="{{car.color}}" />
+            <span class="icon is-small is-left">
+                <i class="fas fa-phone"></i>
+            </span>
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label">Aire Acondicionado</label>
+        <div class="control has-icons-left">
+            <input class="input" type="radio" name="air-conditioning">Si</input>
+            <input class="input" type="radio" name="air-conditioning">No</input>
+            <span class="icon is-small is-left">
+                <i class="fas fa-globe"></i>
+            </span>
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label">Pasajeros</label>
+        <div class="control has-icons-left">
+            <input class="input" type="number" name="passengers" placeholder="car.passengers" value="{{car.passengers}}" />
+            <span class="icon is-small is-left">
+                <i class="fas fa-globe"></i>
+            </span>
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label">Transmision</label>
+        <div class="control has-icons-left">
+            <input class="input" type="radio" name="transmission">Manual</input>
+            <input class="input" type="radio" name="transmission">Automatica</input>
+            <span class="icon is-small is-left">
+                <i class="fas fa-globe"></i>
+            </span>
+        </div>
+    </div>
+
+    <input type="submit" class="button is-primary is-large" value="Guardar" />
+    <hr />
+</form>
+{% endblock %}

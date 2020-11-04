@@ -33,7 +33,6 @@ module.exports = class Service {
         if (car === undefined) {
             throw new CarNotDefinedError();
         }
-
         return this.carRepository.save(car);
     }
 

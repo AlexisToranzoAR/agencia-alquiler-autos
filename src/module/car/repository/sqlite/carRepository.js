@@ -23,6 +23,7 @@ module.exports = class CarRepository extends AbstractCarRepository {
             id = car.id;
             const statement = this.databaseAdapter.prepare(`
                 UPDATE cars SET
+                ${car.crestUrl ? `crest_url = ?,` : ''}
                 brand = ?,
                 model = ?,
                 year = ?,
@@ -31,6 +32,7 @@ module.exports = class CarRepository extends AbstractCarRepository {
                 air_conditioning = ?,
                 passengers = ?,
                 transmission = ?,
+                price_per_day = ?
                 WHERE id = ?
             `);
 
@@ -43,33 +45,42 @@ module.exports = class CarRepository extends AbstractCarRepository {
                 car.airConditioning,
                 car.passengers,
                 car.transmission,
+                car.pricePerDay,
                 car.id
             ];
+
+            if (car.crestUrl) {
+                params.unshift(car.crestUrl);
+            }
 
             statement.run(params);
         } else {
             const statement = this.databaseAdapter.prepare(`
                 INSERT INTO cars(
-                brand
-                model
-                year
-                kms
-                color
-                air_conditioning
-                passengers
-                transmission
-                ) VALUES(?, ?, ?, ?, ?, ?, ?, ?)
+                brand,
+                model,
+                crest_url,
+                year,
+                kms,
+                color,
+                air_conditioning,
+                passengers,
+                transmission,
+                price_per_day
+                ) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             `);
 
             const result = statement.run(
                 car.brand,
                 car.model,
+                car.crestUrl,
                 car.year,
                 car.kms,
                 car.color,
                 car.airConditioning,
                 car.passengers,
-                car.transmission
+                car.transmission,
+                car.pricePerDay
             );
 
             id = result.lastInsertRowid;
@@ -103,12 +114,14 @@ module.exports = class CarRepository extends AbstractCarRepository {
                 id,
                 brand,
                 model,
+                crest_url,
                 year,
                 kms,
                 color,
                 air_conditioning,
                 passengers,
-                transmission
+                transmission,
+                price_per_day
                 FROM cars WHERE id = ?
             `)
             .get(id);
@@ -130,12 +143,14 @@ module.exports = class CarRepository extends AbstractCarRepository {
                 id,
                 brand,
                 model,
+                crest_url,
                 year,
                 kms,
                 color,
                 air_conditioning,
                 passengers,
-                transmission
+                transmission,
+                price_per_day
                 FROM cars
             `)
             .all();

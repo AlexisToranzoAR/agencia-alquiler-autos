@@ -6,7 +6,7 @@
 <div class="level-left">
     <div class="level-item">
         <h1 class="title is-1">
-            {{"Editando club ID: " + car.id if car.id else "Nuevo club"}}
+            {{"Editando un auto ID: " + car.id if car.id else "Nuevo auto"}}
         </h1>
     </div>
     <div class="level-item">
@@ -22,9 +22,9 @@
     <div class="field">
         <label class="label">Marca</label>
         <div class="control has-icons-left">
-            <input class="input" type="text" name="brand" placeholder="Renault" value="{{car.brand}}" />
+            <input class="input" type="text" name="brand" placeholder="Renault" value="{{car.brand}}" required/>
             <span class="icon is-small is-left">
-                <i class="fas fa-signature"></i>
+                <i class="fas fa-car-alt"></i>
             </span>
         </div>
     </div>
@@ -32,19 +32,33 @@
     <div class="field">
         <label class="label">Modelo</label>
         <div class="control has-icons-left">
-            <input class="input" type="text" name="model" placeholder="Sandero" value="{{car.model}}" />
+            <input class="input" type="text" name="model" placeholder="Sandero" value="{{car.model}}" required/>
             <span class="icon is-small is-left">
-                <i class="fas fa-compress"></i>
+                <i class="fas fa-car-alt"></i>
             </span>
         </div>
     </div>
 
     <div class="field">
+        {% if car.crestUrl %}
+        <img src="/{{car.crestUrl}}" width="256" height="256" />
+        {% endif %}
+        <label class="label">Imagen</label>
+        <div class="control has-icons-left">
+            <input class="input" type="file" name="crest-url" {{"" if car.crestUrl else "required"}}/>
+            <span class=" icon is-small is-left">
+                <i class="fas fa-image"></i>
+            </span>
+        </div>
+    </div>
+
+
+    <div class="field">
         <label class="label">Año</label>
         <div class="control has-icons-left">
-            <input class="input" type="number" name="year" placeholder="2018" value="{{car.year}}" />
+            <input class="input" type="text" name="year" placeholder="2018" value="{{car.year}}" required/>
             <span class="icon is-small is-left">
-                <i class="fas fa-compress"></i>
+                <i class="fas fa-calendar"></i>
             </span>
         </div>
     </div>
@@ -52,9 +66,9 @@
     <div class="field">
         <label class="label">Kilometraje</label>
         <div class="control has-icons-left">
-            <input class="input" type="number" name="kms" placeholder="0" value="{{car.kms}}" />
+            <input class="input" type="text" name="kms" placeholder="0KM" value="{{car.kms}}" required/>
             <span class="icon is-small is-left">
-                <i class="fas fa-map-marked"></i>
+                <i class="fas fa-car-alt"></i>
             </span>
         </div>
     </div>
@@ -62,46 +76,63 @@
     <div class="field">
         <label class="label">Color</label>
         <div class="control has-icons-left">
-            <input class="input" type="text" name="color" placeholder="Gris" value="{{car.color}}" />
+            <input class="input" type="text" name="color" placeholder="Gris" value="{{car.color}}" required/>
             <span class="icon is-small is-left">
-                <i class="fas fa-phone"></i>
+                <i class="fas fa-palette"></i>
             </span>
         </div>
     </div>
 
-    <div class="field">
+    <div class="control">
         <label class="label">Aire Acondicionado</label>
-        <div class="control has-icons-left">
-            <input class="input" type="radio" name="air-conditioning">Si</input>
-            <input class="input" type="radio" name="air-conditioning">No</input>
-            <span class="icon is-small is-left">
-                <i class="fas fa-globe"></i>
-            </span>
-        </div>
+        <label class="radio">
+            <input type="radio" name="air-conditioning" value="Si" required {{"checked" if car.airConditioning == "Si"}}>
+            Si
+        </label>
+        <label class="radio">
+            <input type="radio" name="air-conditioning" value="No" {{"checked" if car.airConditioning == "No"}}>
+            No
+        </label>
     </div>
+
+    <br>
 
     <div class="field">
         <label class="label">Pasajeros</label>
         <div class="control has-icons-left">
-            <input class="input" type="number" name="passengers" placeholder="car.passengers" value="{{car.passengers}}" />
+            <input class="input" type="text" name="passengers" placeholder="5" value="{{car.passengers}}" required/>
             <span class="icon is-small is-left">
-                <i class="fas fa-globe"></i>
+                <i class="fas fa-car-alt"></i>
             </span>
         </div>
     </div>
 
+    <div class="control">
+        <label class="label">Transmisión</label>
+        <label class="radio">
+            <input type="radio" name="transmission" value="Manual" required {{"checked" if car.transmission == "Manual"}}>
+            Manual
+        </label>
+        <label class="radio">
+            <input type="radio" name="transmission" value="Automatica" {{"checked" if car.transmission == "Automatica"}}>
+            Automática
+        </label>
+    </div>
+
+    <br>
+
     <div class="field">
-        <label class="label">Transmision</label>
+        <label class="label">Precio por Dia</label>
         <div class="control has-icons-left">
-            <input class="input" type="radio" name="transmission">Manual</input>
-            <input class="input" type="radio" name="transmission">Automatica</input>
+            <input class="input" type="text" name="price-per-day" placeholder="1000" value="{{car.pricePerDay}}" required/>
             <span class="icon is-small is-left">
-                <i class="fas fa-globe"></i>
+                <i class="fas fa-dollar-sign"></i>
             </span>
         </div>
     </div>
 
     <input type="submit" class="button is-primary is-large" value="Guardar" />
+
     <hr />
 </form>
 {% endblock %}

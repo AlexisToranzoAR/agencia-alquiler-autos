@@ -9,52 +9,60 @@ function fromDataToEntity({
     id,
     brand,
     model,
+    'crest-url': crestUrl,
     year,
     kms,
     color,
     'air-conditioning': airConditioning,
     passengers,
     transmission,
+    'price-per-day': pricePerDay,
 }) {
     return new Car({
         id,
         brand,
         model,
+        crestUrl,
         year,
         kms,
         color,
         airConditioning,
         passengers,
         transmission,
+        pricePerDay,
     });
 }
 
 /**
  *
  * @param {Object} formData
- * @returns Club
+ * @returns Car
  */
 function fromDbToEntity({
     id,
     brand,
     model,
+    'crest_url': crestUrl,
     year,
     kms,
     color,
     'air_conditioning': airConditioning,
     passengers,
     transmission,
+    'price_per_day': pricePerDay,
 }) {
     return new Car({
         id,
         brand,
         model,
+        crestUrl,
         year,
         kms,
         color,
         airConditioning,
         passengers,
         transmission,
+        pricePerDay,
     });
 }
 

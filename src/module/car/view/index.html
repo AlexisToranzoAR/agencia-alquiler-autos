@@ -19,7 +19,7 @@
 <nav class="level-right">
     <div class="level-item">
         <a href="/car/create" class="button is-primary is-large">
-            <span class="icon"><i class="fas fa-futbol"></i></span>
+            <span class="icon"><i class="fas fa-car"></i></span>
             <span>Agregar</span>
         </a>
     </div>
@@ -32,12 +32,14 @@
                 <th>ID</th>
                 <th>Marca</th>
                 <th>Modelo</th>
+                <th>Imagen</th>
                 <th>Año</abbr></th>
                 <th>Kilometraje</th>
                 <th>Color</th>
                 <th>Aire Acondicionado</th>
                 <th>Pasajeros</th>
                 <th>Transmisión</th>
+                <th>Precio por Dia</th>
             </tr>
         </thead>
         <!-- el tfoot va después del thead en caso de que el contenido sea muy largo -->
@@ -46,7 +48,7 @@
                 <th colspan="14">
                     <div class="level-right">
                         <a href="/car/create" class="button is-primary is-large">
-                            <span class="icon"><i class="fas fa-futbol"></i></span>
+                            <span class="icon"><i class="fas fa-car"></i></span>
                             <span>Agregar</span>
                         </a>
                     </div>
@@ -60,12 +62,18 @@
                 <td>{{car.id}}</td>
                 <td>{{car.brand}}</td>
                 <td>{{car.model}}</td>
+                <td>
+                    <figure class="image is-128x128">
+                        <img src="/{{car.crestUrl}}" width="128" height="128" />
+                    </figure>
+                </td>
                 <td>{{car.year}}</td>
-                <td>{{car.kms}}</td>
+                <td>{{car.kms + "KM" if car.kms == "0" else car.kms + "KMS"}}</td>
                 <td>{{car.color}}</td>
                 <td>{{car.airConditioning}}</td>
                 <td>{{car.passengers}}</td>
                 <td>{{car.transmission}}</td>
+                <td>{{car.pricePerDay}}</td>
                 <td>
                     <a href="/car/view/{{car.id}}"><span class="icon"><i class="fas fa-edit"></i></span>editar</a>
                 </td>

@@ -1,5 +1,6 @@
 // configure DI container
 const path = require('path');
+const fs = require('fs');
 const { default: DIContainer, object, get, factory } = require('rsdi');
 const multer = require('multer');
 const Sqlite3Database = require('better-sqlite3');
@@ -28,7 +29,9 @@ function configureSession() {
 function configureMulter() {
   const storage = multer.diskStorage({
     destination(req, file, cb) {
-      cb(null, process.env.CRESTS_UPLOAD_DIR);
+      const path = process.env.CRESTS_UPLOAD_DIR;
+      fs.mkdirSync(path, { recursive: true })
+      cb(null, path);
     },
     filename(req, file, cb) {
       // https://stackoverflow.com/questions/31592726/how-to-store-a-file-with-file-extension-with-multer

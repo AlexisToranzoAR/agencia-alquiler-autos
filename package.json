@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/app.js",
-    "dev": "nodemon src/app.js",
+    "schema:sync": "node src/cli/init.db.js",
+    "dev": "npm run schema:sync && nodemon -e 'js,njk,html' src/app.js",
     "test": "jest --coverage",
     "test:dev": "jest --watch"
   },
@@ -13,26 +14,28 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "better-sqlite3": "^7.1.0",
-    "bulma": "^0.9.1",
+    "axios": "^0.19.2",
+    "connect-session-sequelize": "^7.0.1",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
-    "http-server": "^0.12.3",
     "multer": "^1.4.2",
-    "nunjucks": "^3.2.2",
-    "path": "^0.12.7",
-    "rsdi": "^1.0.5"
+    "nunjucks": "^3.2.1",
+    "rsdi": "^1.0.5",
+    "sequelize": "^6.3.3",
+    "sqlite3": "^5.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.3",
-    "@babel/preset-env": "^7.12.1",
-    "babel-jest": "^26.5.2",
-    "eslint": "^7.11.0",
+    "@types/jest": "^26.0.5",
+    "cypress": "^4.11.0",
+    "eslint": "^7.2.0",
     "eslint-config-airbnb-base": "^14.2.0",
-    "eslint-plugin-import": "^2.22.1",
-    "jest": "^26.5.3",
-    "nodemon": "^2.0.6",
-    "npm-run-all": "^4.1.5"
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-jest": "^23.18.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "jest": "^26.1.0",
+    "nodemon": "^2.0.4",
+    "prettier": "^2.0.5"
   }
 }

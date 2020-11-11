@@ -14,29 +14,21 @@ module.exports = class AbstractCarRepository {
    * @param {import('../entity/car')} car
    * @returns {import('../entity/car')}
    */
-  async save(car) {
-    throw new MethodNotImplementedError();
-  }
+  async save(car) {}
 
   /**
    * @param {Number} id
    */
-  async delete(id) {
-    throw new MethodNotImplementedError();
-  }
+  async delete(id) {}
 
   /**
    * @param {Number} id
    * @returns {import('../entity/car')}
    */
-  async getById(id) {
-    throw new MethodNotImplementedError();
-  }
+  async getById(id) {}
 
   /**
    * @returns {Array<import('../entity/car')>}
    */
-  async getAll() {
-    throw new MethodNotImplementedError();
-  }
+  async getAll() {}
 };

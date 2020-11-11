@@ -1,6 +1,7 @@
 const CarController = require('./controller/carController');
 const CarRepository = require('./repository/sqlite/carRepository');
 const CarService = require('./service/carService');
+const CarModel = require('./model/carModel');
 
 /**
  * @param {import('express').Application} app
@@ -19,4 +20,5 @@ module.exports = {
     CarController,
     CarService,
     CarRepository,
+    CarModel,
 };

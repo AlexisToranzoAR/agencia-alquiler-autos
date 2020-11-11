@@ -1,7 +1,11 @@
+// map from Controller to Entity
+// map from Entity to Controller
+// map from Entity to Model
+// map from Model to Entity
+
 const Car = require('../entity/car');
 
 /**
- *
  * @param {Object} formData
  * @returns Car
  */
@@ -34,39 +38,14 @@ function fromDataToEntity({
 }
 
 /**
- *
- * @param {Object} formData
- * @returns Car
+ * @param {import('./carModel')} model
+ * @returns {import('../../entity/car')}
  */
-function fromDbToEntity({
-    id,
-    brand,
-    model,
-    'crest_url': crestUrl,
-    year,
-    kms,
-    color,
-    'air_conditioning': airConditioning,
-    passengers,
-    transmission,
-    'price_per_day': pricePerDay,
-}) {
-    return new Car({
-        id,
-        brand,
-        model,
-        crestUrl,
-        year,
-        kms,
-        color,
-        airConditioning,
-        passengers,
-        transmission,
-        pricePerDay,
-    });
+function fromModelToEntity(model) {
+    return new Car(model.toJSON());
 }
 
 module.exports = {
     fromDataToEntity,
-    fromDbToEntity,
+    fromModelToEntity,
 };

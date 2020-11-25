@@ -1,0 +1,120 @@
+{% extends 'view/layout/base.html' %}
+
+{% block body %}
+{% set client = data.client %}
+
+<div class="level-left">
+    <div class="level-item">
+        <h1 class="title is-1">
+            {{"Editando un cliente ID: " + client.id if client.id else "Nuevo cliente"}}
+        </h1>
+    </div>
+    <div class="level-item">
+        <span><a class="button is-link" href="/client">Cancelar</a></span>
+    </div>
+</div>
+
+<hr />
+
+<form action="/client/save" method="POST" enctype="application/x-www-form-urlencoded">
+    <input type="hidden" name="id" value="{{client.id}}" readonly />
+
+    <div class="field">
+        <label class="label">Nombres</label>
+        <div class="control has-icons-left">
+            <input class="input" type="text" name="names" placeholder="Alexis Leonel" value="{{client.names}}" required/>
+            <span class="icon is-small is-left">
+                <i class="fas fa-user"></i>
+            </span>
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label">Apellidos</label>
+        <div class="control has-icons-left">
+            <input class="input" type="text" name="last-names" placeholder="Toranzo" value="{{client.lastNames}}" required/>
+            <span class="icon is-small is-left">
+                <i class="fas fa-user"></i>
+            </span>
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label">Tipo de Documento</label>
+        <div class="control has-icons-left">
+            <input class="input" type="text" name="document-type" placeholder="DNI" value="{{client.documentType}}" required/>
+            <span class="icon is-small is-left">
+                <i class="fas fa-address-card"></i>
+            </span>
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label">Numero de Documento</label>
+        <div class="control has-icons-left">
+            <input class="input" type="text" name="document-number" placeholder="44333222" value="{{client.documentNumber}}" required/>
+            <span class="icon is-small is-left">
+                <i class="fas fa-address-card"></i>
+            </span>
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label">Nacionalidad</label>
+        <div class="control has-icons-left">
+            <input class="input" type="text" name="nacionality" placeholder="Argentina" value="{{client.nacionality}}" required/>
+            <span class="icon is-small is-left">
+                <i class="fas fa-globe-americas"></i>
+            </span>
+        </div>
+    </div>
+
+    <div class="control">
+        <label class="label">Dirección</label>
+        <div class="control has-icons-left">
+            <input class="input" type="text" name="address" placeholder="Dr. Luis Agote 3500" value="{{client.address}}" required/>
+            <span class="icon is-small is-left">
+                <i class="fas fa-map-marked-alt"></i>
+            </span>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="field">
+        <label class="label">Telefono</label>
+        <div class="control has-icons-left">
+            <input class="input" type="text" name="phone" placeholder="2932578000" value="{{client.phone}}" required/>
+            <span class="icon is-small is-left">
+                <i class="fas fa-phone"></i>
+            </span>
+        </div>
+    </div>
+
+    <div class="control">
+        <label class="label">Email</label>
+        <div class="control has-icons-left">
+            <input class="input" type="text" name="email" placeholder="alextoranzo3@gmail.com" value="{{client.email}}" required/>
+            <span class="icon is-small is-left">
+                <i class="fas fa-inbox"></i>
+            </span>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="field">
+        <label class="label">Fecha de Nacimiento</label>
+        <div class="control has-icons-left">
+            <input class="input" type="text" name="birthdate" placeholder="23/04/2002" value="{{client.birthdate}}" required/>
+            <span class="icon is-small is-left">
+                <i class="fas fa-address-card"></i>
+            </span>
+        </div>
+    </div>
+
+    <input type="submit" class="button is-primary is-large" value="Guardar" />
+
+    <hr />
+</form>
+{% endblock %}

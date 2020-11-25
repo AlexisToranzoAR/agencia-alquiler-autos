@@ -6,7 +6,6 @@ const CarIdNotDefinedError = require('../error/carIdNotDefinedError');
 module.exports = class CarRepository extends AbstractCarRepository {
     /**
    * @param {typeof import('../../model/carModel')} carModel
-   * * @param {typeof import('../../../area/model/areaModel')} areaModel
    */
     constructor(carModel) {
         super();

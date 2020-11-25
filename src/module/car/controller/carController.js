@@ -19,11 +19,8 @@ module.exports = class CarController extends AbstractController {
   configureRoutes(app) {
     const ROUTE = this.ROUTE_BASE;
 
-    // Nota: el `bind` es necesario porque estamos atando el callback a una función miembro de esta clase
-    // y no a la clase en si.
-    // Al hacer `bind` nos aseguramos que "this" dentro de `create` sea el controlador.
-    app.get(`${ROUTE}/create`, this.create.bind(this));
     app.get(`${ROUTE}`, this.index.bind(this));
+    app.get(`${ROUTE}/create`, this.create.bind(this));
     app.get(`${ROUTE}/view/:id`, this.view.bind(this));
     app.post(`${ROUTE}/save`, this.uploadMiddleware.single('crest-url'), this.save.bind(this));
     app.get(`${ROUTE}/delete/:id`, this.delete.bind(this));
@@ -74,7 +71,6 @@ module.exports = class CarController extends AbstractController {
    */
   async save(req, res) {
     try {
-      console.log(req.body)
       const car = fromDataToEntity(req.body);
       if (req.file) {
         const { path } = req.file;
@@ -102,7 +98,7 @@ module.exports = class CarController extends AbstractController {
       const { id } = req.params;
       const car = await this.carService.getById(id);
       await this.carService.delete(car);
-      req.session.messages = [`Se eliminó el car ID: ${id} (${car.brand} ${car.model})`];
+      req.session.messages = [`Se eliminó el auto con id ${id} (${car.brand} ${car.model})`];
     } catch (e) {
       req.session.errors = [e.message, e.stack];
     }

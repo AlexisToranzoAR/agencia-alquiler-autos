@@ -1,8 +1,3 @@
-// map from Controller to Entity
-// map from Entity to Controller
-// map from Entity to Model
-// map from Model to Entity
-
 const Car = require('../entity/car');
 
 /**

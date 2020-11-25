@@ -1,7 +1,3 @@
-/**
- * @typedef {import('../repository/abstractCarRepository')} AbstractCarRepository
- */
-
 const CarNotDefinedError = require('./error/carNotDefinedError');
 const CarIdNotDefinedError = require('./error/carIdNotDefinedError');
 const Car = require('../entity/car');

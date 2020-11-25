@@ -1,0 +1,131 @@
+{% extends 'view/layout/base.html' %}
+
+{% block body %}
+{% set rental = data.rental %}
+{% set cars = data.cars %}
+{% set clients = data.clients %}
+
+<div class="level-left">
+    <div class="level-item">
+        <h1 class="title is-1">
+            {{"Editando un alquiler ID: " + rental.id if rental.id else "Nuevo alquiler"}}
+        </h1>
+    </div>
+    <div class="level-item">
+        <span><a class="button is-link" href="/rental">Cancelar</a></span>
+    </div>
+</div>
+
+<hr />
+
+<form action="/rental/save" method="POST" enctype="application/x-www-form-urlencoded">
+    <input type="hidden" name="id" value="{{rental.id}}" readonly />
+
+    <div class="field">
+        <label class="label">Auto</label>
+        <div class="control has-icons-left">
+            <div class="select">
+                <select id="car-options" name="car_id">
+                    <option value="0" {{"selected" if rental.id}}>Seleccione</option>
+                    {% for car in cars %}
+                    <option value="{{car.id}}" {{"selected" if car.id == rental.Car.id}} {{"data-car-value=" + car.pricePerDay}}>
+                        {{car.brand + " " + car.model + " - Precio por dia $" + car.pricePerDay}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <span class="icon is-small is-left">
+                <i class="fas fa-car"></i>
+            </span>
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label">Cliente</label>
+        <div class="control has-icons-left">
+            <div class="select">
+                <select name="client_id">
+                    <option value="0" {{"selected" if rental.id}}>Seleccione</option>
+                    {% for client in clients %}
+                    <option value="{{client.id}}" {{"selected" if client.id == rental.Client.id}}>
+                        {{client.names + " " + client.lastNames + " - " + client.documentType + " : " + client.documentNumber}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <span class="icon is-small is-left">
+                <i class="fas fa-user"></i>
+            </span>
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label">Precio Unitario</label>
+        <div class="control has-icons-left">
+            <input id="unit-price-input" class="input" type="text" name="unit-price" placeholder="Seleccione un auto" value="{{rental.unitPrice}}" readonly/>
+            <span class="icon is-small is-left">
+                <i class="fas fa-dollar-sign"></i>
+            </span>
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label">Desde</label>
+        <div class="control has-icons-left">
+            <input id="since-date-input" class="input" name="since-date" type="date" value="{{rental.sinceDate}}">
+            <span class="icon is-small is-left">
+                <i class="fas fa-calendar"></i>
+            </span>
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label">Hasta</label>
+        <div class="control has-icons-left">
+            <input id="until-date-input" class="input" name="until-date" type="date" value="{{rental.untilDate}}">
+            <span class="icon is-small is-left">
+                <i class="fas fa-calendar"></i>
+            </span>
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label">Precio Total</label>
+        <div class="control has-icons-left">
+            <input id="total-price-input" class="input" type="text" name="total-price" placeholder="Seleccione la fecha desde y hasta para calcular el total" value="{{rental.totalPrice}}" readonly/>
+            <span class="icon is-small is-left">
+                <i class="fas fa-dollar-sign"></i>
+            </span>
+        </div>
+    </div>
+
+    <div class="control">
+        <label class="label">Metodo de Pago</label>
+        <label class="radio">
+            <input type="radio" name="payment-method" value="Efectivo" required {{"checked" if rental.paymentMethod == "Efectivo"}}>
+            Efectivo
+        </label>
+        <label class="radio">
+            <input type="radio" name="payment-method" value="Tarjeta" {{"checked" if rental.paymentMethod == "Tarjeta"}}>
+            Tarjeta
+        </label>
+    </div>
+
+    <div class="control">
+        <label class="label">Pago</label>
+        <label class="radio">
+            <input type="radio" name="paid" value="1" required {{"checked" if rental.paid == "1"}}>
+            Si
+        </label>
+        <label class="radio">
+            <input type="radio" name="paid" value="" {{"checked" if rental.paid == "0"}}>
+            No
+        </label>
+    </div>
+
+    <input type="submit" class="button is-primary is-large" value="Guardar" />
+
+    <hr />
+</form>
+
+<script src="/public/js/moment.js"></script>
+<script src="/public/js/rental.form.js"></script>
+{% endblock %}

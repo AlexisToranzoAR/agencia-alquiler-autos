@@ -1,11 +1,10 @@
 const AbstractCarRepositoryError = require('./error/abstractCarRepositoryError');
-const MethodNotImplementedError = require('./error/methodNotImplementedError');
 
 module.exports = class AbstractCarRepository {
   constructor() {
     if (new.target === AbstractCarRepository) {
       throw new AbstractCarRepositoryError(
-        'No se puede instanciar el repositorio de car abstracto.'
+        'No se puede instanciar el repositorio de auto abstracto.'
       );
     }
   }

@@ -4,10 +4,13 @@ const fs = require('fs');
 const { default: DIContainer, object, get, factory } = require('rsdi');
 const { Sequelize } = require('sequelize');
 const multer = require('multer');
+const moment = require('../../public/js/moment')
 
 const session = require('express-session');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const { CarController, CarService, CarRepository, CarModel } = require('../module/car/module');
+const { ClientController, ClientService, ClientRepository, ClientModel } = require('../module/client/module');
+const { RentalController, RentalService, RentalRepository, RentalModel } = require('../module/rental/module');
 
 function configureMainSequelizeDatabase() {
   const sequelize = new Sequelize({
@@ -28,11 +31,29 @@ function configureSessionSequelizeDatabase() {
 /**
  * @param {DIContainer} container
  */
-function configureCarModel(container) {
-  CarModel.setup(container.get('Sequelize'));
-  return CarModel;
+function configureRentalModel(container) {
+  RentalModel.setup(container.get('Sequelize'));
+  RentalModel.setupAssociations(container.get('CarModel'), container.get('ClientModel'));
+  return RentalModel;
 }
 
+/**
+ * @param {DIContainer} container
+ */
+function configureCarModel(container) {
+  return CarModel.setup(container.get('Sequelize'));
+}
+
+/**
+ * @param {DIContainer} container
+ */
+function configureClientModel(container) {
+  return ClientModel.setup(container.get('Sequelize'));
+}
+
+/**
+ * @param {DIContainer} container
+ */
 function configureSession(container) {
   const ONE_WEEK_IN_SECONDS = 604800000;
 
@@ -55,8 +76,6 @@ function configureMulter() {
       cb(null, path);
     },
     filename(req, file, cb) {
-      // https://stackoverflow.com/questions/31592726/how-to-store-a-file-with-file-extension-with-multer
-      // al tener una extensión, el navegador lo sirve en vez de descargarlo
       cb(null, Date.now() + path.extname(file.originalname));
     },
   });
@@ -73,7 +92,28 @@ function addCommonDefinitions(container) {
     SessionSequelize: factory(configureSessionSequelizeDatabase),
     Session: factory(configureSession),
     Multer: factory(configureMulter),
+    Moment: factory(moment)
   });
+}
+
+/**
+ * @param {DIContainer} container
+ */
+function addRentalModuleDefinitions(container) {
+  container.addDefinitions({
+    RentalController: object(RentalController).construct(
+      get('RentalService'),
+      get('CarService'),
+      get('ClientService')
+    ),
+    RentalService: object(RentalService).construct(get('RentalRepository'), get('Moment')),
+    RentalRepository: object(RentalRepository).construct(
+      get('RentalModel'),
+      get('CarModel'),
+      get('ClientModel')
+    ),
+    RentalModel: factory(configureRentalModel),
+  })
 }
 
 /**
@@ -88,9 +128,23 @@ function addCarModuleDefinitions(container) {
   });
 }
 
+/**
+ * @param {DIContainer} container
+ */
+function addClientModuleDefinitions(container) {
+  container.addDefinitions({
+    ClientController: object(ClientController).construct(get('ClientService')),
+    ClientService: object(ClientService).construct(get('ClientRepository')),
+    ClientRepository: object(ClientRepository).construct(get('ClientModel')),
+    ClientModel: factory(configureClientModel),
+  })
+}
+
 module.exports = function configureDI() {
   const container = new DIContainer();
   addCommonDefinitions(container);
+  addRentalModuleDefinitions(container);
   addCarModuleDefinitions(container);
+  addClientModuleDefinitions(container);
   return container;
 };

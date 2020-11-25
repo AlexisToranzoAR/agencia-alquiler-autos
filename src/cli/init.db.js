@@ -9,7 +9,9 @@ const container = configureDependencyInjection(app);
  * @type {import('sequelize').Sequelize} mainDb
  */
 const mainDb = container.get('Sequelize');
+container.get('RentalModel');
 container.get('CarModel');
+container.get('ClientModel');
 mainDb.sync();
 
 /**

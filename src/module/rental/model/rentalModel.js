@@ -59,5 +59,7 @@ module.exports = class RentalModel extends Model {
     static setupAssociations(CarModel, ClientModel) {
         RentalModel.belongsTo(CarModel, { foreignKey: 'car_id' });
         RentalModel.belongsTo(ClientModel, { foreignKey: 'client_id' });
+
+        return RentalModel;
     }
 }

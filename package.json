@@ -5,10 +5,11 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/app.js",
-    "schema:sync": "node src/cli/init.db.js",
-    "dev": "npm run schema:sync && nodemon -e 'js,njk,html' src/app.js",
+    "schema:migrate": "npx sequelize-cli db:migrate",
+    "dev": "nodemon --inspect --watch ./src/ -e 'js,njk,html' --verbose ./src/app.js",
+    "dev:legacy": "nodemon --inspect --watch ./src/ -L -e 'js,njk,html' --verbose ./src/app.js",
     "test": "jest --coverage",
-    "test:dev": "jest --watch"
+    "test:watch": "jest --watch"
   },
   "keywords": [],
   "author": "",

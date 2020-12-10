@@ -19,16 +19,26 @@ nunjucks.configure('src/module', {
 });
 
 const container = configureDependencyInjection(app);
-app.use(container.get('Session'));
 
-initRentalModule(app, container);
 initCarModule(app, container);
 initClientModule(app, container);
+initRentalModule(app, container);
 
 /**
  * @type {import('./module/car/controller/carController')} controller;
  */
-const carController = container.get('CarController');
-app.get('/', carController.index.bind(carController));
+/* const carController = container.get('CarController');
+app.get('/', carController.index.bind(carController)); */
+
+const defaultController = container.get('DefaultController');
+defaultController.configureRoutes(app);
+
+app.use(function (err, req, res, next) {
+  res.status(500);
+  res.render(`default/views/error.html`, {
+    title: 'Error',
+    error: err
+  });
+})
 
 app.listen(port, () => console.log(`Server listening at http://localhost:${port}`));

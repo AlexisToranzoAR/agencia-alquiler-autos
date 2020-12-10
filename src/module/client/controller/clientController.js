@@ -31,10 +31,7 @@ module.exports = class ClientController extends AbstractController {
      */
     async index(req, res) {
         const clients = await this.clientService.getAll();
-        const { errors, messages } = req.session;
-        res.render("client/view/index.html", { data: { clients }, messages, errors });
-        req.session.errors = [];
-        req.session.messages = [];
+        res.render("client/view/index.html", { data: { clients }/* , messages, errors */ });
     }
 
     /**
@@ -49,7 +46,7 @@ module.exports = class ClientController extends AbstractController {
      * @param {import('express').Request} req
      * @param {import('express').Response} res
      */
-    async view(req, res) {
+    async view(req, res, next) {
         const { id } = req.params;
         if (!id) {
             throw new ClientIdNotDefinedError();
@@ -59,8 +56,7 @@ module.exports = class ClientController extends AbstractController {
             const client = await this.clientService.getById(id);
             res.render("client/view/form.html", { data: { client } });
         } catch (e) {
-            req.session.errors = [e.message, e.stack];
-            res.redirect("/client");
+            next(e);
         }
     }
 
@@ -68,11 +64,11 @@ module.exports = class ClientController extends AbstractController {
      * @param {import('express').Request} req
      * @param {import('express').Response} res
      */
-    async save(req, res) {
+    async save(req, res, next) {
         try {
             const client = fromDataToEntity(req.body);
             const savedClient = await this.clientService.save(client);
-            if (client.id) {
+            /* if (client.id) {
                 req.session.messages = [
                     `El cliente con id ${client.id} se actualizó exitosamente`,
                 ];
@@ -80,11 +76,10 @@ module.exports = class ClientController extends AbstractController {
                 req.session.messages = [
                     `Se creó el cliente con id ${savedClient.id} (${savedClient.names} ${savedClient.lastNames})`,
                 ];
-            }
+            } */
             res.redirect("/client");
         } catch (e) {
-            req.session.errors = [e.message, e.stack];
-            res.redirect("/client");
+            next(e);
         }
     }
 
@@ -92,17 +87,17 @@ module.exports = class ClientController extends AbstractController {
      * @param {import('express').Request} req
      * @param {import('express').Response} res
      */
-    async delete(req, res) {
+    async delete(req, res, next) {
         try {
             const { id } = req.params;
             const client = await this.clientService.getById(id);
             await this.clientService.delete(client);
-            req.session.messages = [
+            /* req.session.messages = [
                 `Se eliminó el cliente con id ${id} (${client.names} ${client.lastNames})`,
-            ];
+            ]; */
+            res.redirect("/client");
         } catch (e) {
-            req.session.errors = [e.message, e.stack];
+            next(e);
         }
-        res.redirect("/client");
     }
 };

@@ -32,10 +32,7 @@ module.exports = class CarController extends AbstractController {
    */
   async index(req, res) {
     const cars = await this.carService.getAll();
-    const { errors, messages } = req.session;
-    res.render('car/view/index.html', { data: { cars }, messages, errors });
-    req.session.errors = [];
-    req.session.messages = [];
+    res.render('car/view/index.html', { data: { cars }/* , messages, errors */ });
   }
 
   /**
@@ -50,7 +47,7 @@ module.exports = class CarController extends AbstractController {
    * @param {import('express').Request} req
    * @param {import('express').Response} res
    */
-  async view(req, res) {
+  async view(req, res, next) {
     const { id } = req.params;
     if (!id) {
       throw new CarIdNotDefinedError();
@@ -60,8 +57,7 @@ module.exports = class CarController extends AbstractController {
       const car = await this.carService.getById(id);
       res.render('car/view/form.html', { data: { car } });
     } catch (e) {
-      req.session.errors = [e.message, e.stack];
-      res.redirect('/car');
+      next(e);
     }
   }
 
@@ -69,7 +65,7 @@ module.exports = class CarController extends AbstractController {
    * @param {import('express').Request} req
    * @param {import('express').Response} res
    */
-  async save(req, res) {
+  async save(req, res, next) {
     try {
       const car = fromDataToEntity(req.body);
       if (req.file) {
@@ -77,15 +73,14 @@ module.exports = class CarController extends AbstractController {
         car.crestUrl = path;
       }
       const savedCar = await this.carService.save(car);
-      if (car.id) {
+      /* if (car.id) {
         req.session.messages = [`El auto con id ${car.id} se actualizó exitosamente`];
       } else {
         req.session.messages = [`Se creó el auto con id ${savedCar.id} (${savedCar.brand} ${savedCar.model})`];
-      }
+      } */
       res.redirect('/car');
     } catch (e) {
-      req.session.errors = [e.message, e.stack];
-      res.redirect('/car');
+      next(e);
     }
   }
 
@@ -93,15 +88,15 @@ module.exports = class CarController extends AbstractController {
    * @param {import('express').Request} req
    * @param {import('express').Response} res
    */
-  async delete(req, res) {
+  async delete(req, res, next) {
     try {
       const { id } = req.params;
       const car = await this.carService.getById(id);
       await this.carService.delete(car);
-      req.session.messages = [`Se eliminó el auto con id ${id} (${car.brand} ${car.model})`];
+      /* req.session.messages = [`Se eliminó el auto con id ${id} (${car.brand} ${car.model})`]; */
+      res.redirect('/car');
     } catch (e) {
-      req.session.errors = [e.message, e.stack];
+      next(e);
     }
-    res.redirect('/car');
   }
 };

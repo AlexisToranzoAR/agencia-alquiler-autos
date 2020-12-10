@@ -3,11 +3,9 @@ const path = require('path');
 const fs = require('fs');
 const { default: DIContainer, object, get, factory } = require('rsdi');
 const { Sequelize } = require('sequelize');
-const multer = require('multer');
-const moment = require('../../public/js/moment')
+const multer = require('multer')
 
-const session = require('express-session');
-const SequelizeStore = require('connect-session-sequelize')(session.Store);
+const { DefaultController } = require('../module/default/module');
 const { CarController, CarService, CarRepository, CarModel } = require('../module/car/module');
 const { ClientController, ClientService, ClientRepository, ClientModel } = require('../module/client/module');
 const { RentalController, RentalService, RentalRepository, RentalModel } = require('../module/rental/module');
@@ -16,14 +14,6 @@ function configureMainSequelizeDatabase() {
   const sequelize = new Sequelize({
     dialect: 'sqlite',
     storage: process.env.DB_PATH,
-  });
-  return sequelize;
-}
-
-function configureSessionSequelizeDatabase() {
-  const sequelize = new Sequelize({
-    dialect: 'sqlite',
-    storage: process.env.SESSION_DB_PATH,
   });
   return sequelize;
 }
@@ -51,27 +41,10 @@ function configureClientModel(container) {
   return ClientModel.setup(container.get('Sequelize'));
 }
 
-/**
- * @param {DIContainer} container
- */
-function configureSession(container) {
-  const ONE_WEEK_IN_SECONDS = 604800000;
-
-  const sequelize = container.get('SessionSequelize');
-  const sessionOptions = {
-    store: new SequelizeStore({ db: sequelize }),
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    cookie: { maxAge: ONE_WEEK_IN_SECONDS },
-  };
-  return session(sessionOptions);
-}
-
 function configureMulter() {
   const storage = multer.diskStorage({
     destination(req, file, cb) {
-      const path = process.env.CRESTS_UPLOAD_DIR;
+      const path = process.env.MULTER_UPLOADS_DIR;
       fs.mkdirSync(path, { recursive: true })
       cb(null, path);
     },
@@ -89,10 +62,8 @@ function configureMulter() {
 function addCommonDefinitions(container) {
   container.addDefinitions({
     Sequelize: factory(configureMainSequelizeDatabase),
-    SessionSequelize: factory(configureSessionSequelizeDatabase),
-    Session: factory(configureSession),
     Multer: factory(configureMulter),
-    Moment: factory(moment)
+    DefaultController: object(DefaultController).construct(get('RentalService'))
   });
 }
 
@@ -106,7 +77,7 @@ function addRentalModuleDefinitions(container) {
       get('CarService'),
       get('ClientService')
     ),
-    RentalService: object(RentalService).construct(get('RentalRepository'), get('Moment')),
+    RentalService: object(RentalService).construct(get('RentalRepository')),
     RentalRepository: object(RentalRepository).construct(
       get('RentalModel'),
       get('CarModel'),

@@ -7,9 +7,8 @@ module.exports = class Service {
      *
      * @param {AbstractRentalRepository} rentalRepository
      */
-    constructor(rentalRepository, moment) {
+    constructor(rentalRepository) {
         this.rentalRepository = rentalRepository;
-        this.moment = moment;
     }
 
     /**

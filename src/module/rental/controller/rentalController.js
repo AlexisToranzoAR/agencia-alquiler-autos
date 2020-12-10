@@ -35,28 +35,28 @@ module.exports = class RentalController extends AbstractController {
      */
     async index(req, res) {
         const rentals = await this.rentalService.getAll();
-        const { errors, messages } = req.session;
-        res.render("rental/view/index.html", { data: { rentals }, messages, errors });
-        req.session.errors = [];
-        req.session.messages = [];
+        res.render("rental/view/index.html", { data: { rentals }/* , messages, errors */ });
     }
 
     /**
      * @param {import('express').Request} req
      * @param {import('express').Response} res
      */
-    async create(req, res) {
-        const cars = await this.carService.getAll();
-        const clients = await this.clientService.getAll();
+    async create(req, res, next) {
+        try {
+            const cars = await this.carService.getAll();
+            const clients = await this.clientService.getAll();
 
-        if (cars.length > 0 && clients.length > 0) {
-            res.render('rental/view/form.html', { data: {cars, clients} });
-        } else if (!cars.length > 0 && !clients.length > 0) {
-            req.session.errors = ['Para crear un alquiler, primero debe crear un auto y un cliente'];
-            res.redirect(this.ROUTE_BASE);
-        } else {
-            req.session.errors = [(cars.length > 0)?'Para crear un alquiler, primero debe crear un cliente':'Para crear un alquiler, primero debe crear un auto'];
-            res.redirect(this.ROUTE_BASE);
+            if (cars.length > 0 && clients.length > 0) {
+                res.render('rental/view/form.html', { data: { cars, clients } });
+            } else if (!cars.length > 0 && !clients.length > 0) {
+                throw new Error('Para crear un alquiler, primero debe crear un auto y un cliente');
+            } else {
+                const error = (cars.length > 0) ? 'Para crear un alquiler, primero debe crear un cliente' : 'Para crear un alquiler, primero debe crear un auto';
+                throw new Error(error);
+            }
+        } catch (e) {
+            next(e);
         }
     }
 
@@ -64,7 +64,7 @@ module.exports = class RentalController extends AbstractController {
      * @param {import('express').Request} req
      * @param {import('express').Response} res
      */
-    async view(req, res) {
+    async view(req, res, next) {
         const { id } = req.params;
         if (!id) {
             throw new RentalIdNotDefinedError();
@@ -76,8 +76,7 @@ module.exports = class RentalController extends AbstractController {
             const clients = await this.clientService.getAll();
             res.render("rental/view/form.html", { data: { rental, cars, clients } });
         } catch (e) {
-            req.session.errors = [e.message, e.stack];
-            res.redirect("/rental");
+            next(e);
         }
     }
 
@@ -85,11 +84,11 @@ module.exports = class RentalController extends AbstractController {
      * @param {import('express').Request} req
      * @param {import('express').Response} res
      */
-    async save(req, res) {
+    async save(req, res, next) {
         try {
             const rental = fromDataToEntity(req.body);
             const savedRental = await this.rentalService.save(rental, this.carService, this.clientService);
-            if (rental.id) {
+            /* if (rental.id) {
                 req.session.messages = [
                     `La renta con id ${rental.id} se actualizó exitosamente`,
                 ];
@@ -97,11 +96,10 @@ module.exports = class RentalController extends AbstractController {
                 req.session.messages = [
                     `Se creó la renta con id ${savedRental.id} (${savedRental.Car} ${savedRental.Client})`,
                 ];
-            }
+            } */
             res.redirect("/rental");
         } catch (e) {
-            req.session.errors = [e.message, e.stack];
-            res.redirect("/rental");
+            next(e);
         }
     }
 
@@ -109,17 +107,17 @@ module.exports = class RentalController extends AbstractController {
      * @param {import('express').Request} req
      * @param {import('express').Response} res
      */
-    async delete(req, res) {
+    async delete(req, res, next) {
         try {
             const { id } = req.params;
             const rental = await this.rentalService.getById(id);
             await this.rentalService.delete(rental);
-            req.session.messages = [
+            /* req.session.messages = [
                 `Se eliminó la renta con id ${id} (${rental.Car} ${rental.Client})`,
-            ];
+            ]; */
+            res.redirect("/rental");
         } catch (e) {
-            req.session.errors = [e.message, e.stack];
+            next(e);
         }
-        res.redirect("/rental");
     }
 };

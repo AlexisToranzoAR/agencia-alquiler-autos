@@ -21,7 +21,7 @@ module.exports = class DefaultController {
    */
   async index(req, res) {
     const rentals = await this.rentalService.getAll();
-    res.render(`rental/view/index.html`, { rentals });
+    res.render(`rental/view/index.html`, { data: { rentals } });
   }
 
 };

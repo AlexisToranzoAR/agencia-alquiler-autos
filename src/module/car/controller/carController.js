@@ -21,8 +21,8 @@ module.exports = class CarController extends AbstractController {
 
     app.get(`${ROUTE}`, this.index.bind(this));
     app.get(`${ROUTE}/create`, this.create.bind(this));
-    app.get(`${ROUTE}/view/:id`, this.view.bind(this));
-    app.post(`${ROUTE}/save`, this.uploadMiddleware.single('crest-url'), this.save.bind(this));
+    app.get(`${ROUTE}/edit/:id`, this.view.bind(this));
+    app.post(`${ROUTE}/save`, this.uploadMiddleware.single('img'), this.save.bind(this));
     app.get(`${ROUTE}/delete/:id`, this.delete.bind(this));
   }
 
@@ -32,7 +32,7 @@ module.exports = class CarController extends AbstractController {
    */
   async index(req, res) {
     const cars = await this.carService.getAll();
-    res.render('car/view/index.html', { data: { cars }/* , messages, errors */ });
+    res.render('car/view/index.html', { data: { cars } });
   }
 
   /**
@@ -70,14 +70,9 @@ module.exports = class CarController extends AbstractController {
       const car = fromDataToEntity(req.body);
       if (req.file) {
         const { path } = req.file;
-        car.crestUrl = path;
+        car.img = path;
       }
       const savedCar = await this.carService.save(car);
-      /* if (car.id) {
-        req.session.messages = [`El auto con id ${car.id} se actualizó exitosamente`];
-      } else {
-        req.session.messages = [`Se creó el auto con id ${savedCar.id} (${savedCar.brand} ${savedCar.model})`];
-      } */
       res.redirect('/car');
     } catch (e) {
       next(e);

@@ -1,4 +1,6 @@
 const { fromModelToEntity } = require('../../mapper/rentalMapper');
+const { fromModelToEntity: fromCarModelToEntity } = require('../../../car/mapper/carMapper');
+const { fromModelToEntity: fromClientModelToEntity } = require('../../../client/mapper/clientMapper');
 const AbstractRentalRepository = require('../abstractRentalRepository');
 const RentalNotFoundError = require('../error/rentalNotFoundError');
 const RentalIdNotDefinedError = require('../error/rentalIdNotDefinedError');
@@ -22,11 +24,10 @@ module.exports = class RentalRepository extends AbstractRentalRepository {
      */
     async save(rental) {
         let rentalModel;
-        const buildOptions = { isNewRecord: !rental.id };
-        rentalModel = this.rentalModel.build(rental, buildOptions);
-        rentalModel.setDataValue('car_id', rental.Car.id);
-        rentalModel.setDataValue('client_id', rental.Client.id);
-        rentalModel = await rentalModel.save();
+        const rentalInstance = this.rentalModel.build(rental, {
+            isNewRecord: !rental.id,
+        });
+        rentalModel = await rentalInstance.save();
 
         return fromModelToEntity(rentalModel);
     }
@@ -65,8 +66,13 @@ module.exports = class RentalRepository extends AbstractRentalRepository {
      */
     async getAll() {
         const rentals = await this.rentalModel.findAll({
-            include: [this.carModel, this.clientModel],
+            include: [
+                {model: this.carModel, paranoid: false},
+                {model: this.clientModel, paranoid: false}
+            ],
         });
-        return rentals.map(fromModelToEntity);
+        console.log(rentals.map(r => fromModelToEntity(r, fromCarModelToEntity, fromClientModelToEntity)))
+        return rentals.map(r => fromModelToEntity(r, fromCarModelToEntity, fromClientModelToEntity));
+
     }
 }

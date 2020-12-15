@@ -25,7 +25,7 @@
         <label class="label">Auto</label>
         <div class="control has-icons-left">
             <div class="select">
-                <select id="car-options" name="car_id">
+                <select id="car-options" name="car-id">
                     <option value="0" {{"selected" if rental.id}}>Seleccione</option>
                     {% for car in cars %}
                     <option value="{{car.id}}" {{"selected" if car.id == rental.Car.id}} {{"data-car-value=" + car.pricePerDay}}>
@@ -43,7 +43,7 @@
         <label class="label">Cliente</label>
         <div class="control has-icons-left">
             <div class="select">
-                <select name="client_id">
+                <select name="client-id">
                     <option value="0" {{"selected" if rental.id}}>Seleccione</option>
                     {% for client in clients %}
                     <option value="{{client.id}}" {{"selected" if client.id == rental.Client.id}}>

@@ -1,12 +1,10 @@
 const Rental = require('../entity/rental');
-const Car = require('../../car/entity/car');
-const Client = require('../../client/entity/client');
 
 /**
  * @param {Object} formData
  * @returns Rental
  */
-function fromDataToEntity({
+function fromFormToEntity({
     id,
     'unit-price': unitPrice,
     'since-date': sinceDate,
@@ -14,8 +12,8 @@ function fromDataToEntity({
     'total-price': totalPrice,
     'payment-method': paymentMethod,
     paid,
-    car_id,
-    client_id,
+    'car-id': carId,
+    'client-id': clientId,
 }) {
     return new Rental({
         id: Number(id),
@@ -25,8 +23,8 @@ function fromDataToEntity({
         totalPrice,
         paymentMethod,
         paid: Boolean(paid),
-        Car: new Car({ id: Number(car_id) }),
-        Client: new Client({ id: Number(client_id) }),
+        carId: Number(carId),
+        clientId: Number(clientId)
     })
 }
 
@@ -34,11 +32,39 @@ function fromDataToEntity({
  * @param {import('./rentalModel')} model
  * @returns {import('../../entity/rental')}
  */
-function fromModelToEntity(model) {
-    return new Rental(model.toJSON());
+function fromModelToEntity({
+    id,
+    unitPrice,
+    sinceDate,
+    untilDate,
+    totalPrice,
+    paymentMethod,
+    paid,
+    carId,
+    clientId,
+    createdAt,
+    updatedAt,
+    Car,
+    Client
+}, fromCarModelToEntityMapper, fromClientModelToEntityMapper) {
+    return new Rental({
+        id,
+        unitPrice,
+        sinceDate,
+        untilDate,
+        totalPrice,
+        paymentMethod,
+        paid,
+        carId,
+        clientId,
+        createdAt,
+        updatedAt,
+        car: Car ? fromCarModelToEntityMapper(Car) : {},
+        client: Client ? fromClientModelToEntityMapper(Client) : {}
+    });
 }
 
 module.exports = {
-    fromDataToEntity,
+    fromFormToEntity,
     fromModelToEntity,
 };

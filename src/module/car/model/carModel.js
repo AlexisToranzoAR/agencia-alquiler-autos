@@ -17,47 +17,50 @@ module.exports = class CarModel extends Model {
         },
         brand: {
           type: DataTypes.STRING,
+          allowNull: false,
         },
         model: {
           type: DataTypes.STRING,
+          allowNull: false,
         },
-        crestUrl: {
+        img: {
           type: DataTypes.STRING,
+          allowNull: false,
         },
         year: {
           type: DataTypes.INTEGER,
+          allowNull: false,
         },
         kms: {
           type: DataTypes.INTEGER,
+          allowNull: false,
         },
         color: {
           type: DataTypes.STRING,
+          allowNull: false,
         },
         airConditioning: {
           type: DataTypes.BOOLEAN,
+          allowNull: false,
         },
         passengers: {
           type: DataTypes.INTEGER,
+          allowNull: false,
         },
         transmission: {
-          type: DataTypes.STRING,
+          type: DataTypes.BOOLEAN,
+          allowNull: false,
         },
         pricePerDay: {
-          type: DataTypes.INTEGER,
-        },
-        lastUpdated: {
-          type: DataTypes.DATE,
-          defaultValue: Sequelize.NOW,
-        },
-        createdAt: {
-          type: DataTypes.DATE,
-          defaultValue: Sequelize.NOW,
+          type: DataTypes.FLOAT,
+          allowNull: false,
         },
       },
       {
         sequelize: sequelizeInstance,
         modelName: 'Car',
-        timestamps: false,
+        tableName: 'cars',
+        underscored: 'true'
       }
     );
 

@@ -14,7 +14,7 @@ module.exports = class Service {
     /**
      * @param {Rental} rental
      */
-    async save(rental, carService, clientService) {
+    async save(rental) {
         if (rental === undefined) {
             throw new RentalNotDefinedError();
         }

@@ -17,44 +17,46 @@ module.exports = class ClientModel extends Model {
                 },
                 names: {
                     type: DataTypes.STRING,
+                    allowNull: false,
                 },
                 lastNames: {
                     type: DataTypes.STRING,
+                    allowNull: false,
                 },
                 documentType: {
                     type: DataTypes.STRING,
+                    allowNull: false,
                 },
                 documentNumber: {
                     type: DataTypes.INTEGER,
+                    allowNull: false,
                 },
                 nacionality: {
                     type: DataTypes.STRING,
+                    allowNull: false,
                 },
                 address: {
                     type: DataTypes.STRING,
+                    allowNull: false,
                 },
                 phone: {
-                    type: DataTypes.INTEGER,
+                    type: DataTypes.STRING,
+                    allowNull: false,
                 },
                 email: {
                     type: DataTypes.STRING,
+                    allowNull: false,
                 },
                 birthdate: {
                     type: DataTypes.STRING,
-                },
-                lastUpdated: {
-                    type: DataTypes.DATE,
-                    defaultValue: Sequelize.NOW,
-                },
-                createdAt: {
-                    type: DataTypes.DATE,
-                    defaultValue: Sequelize.NOW,
+                    allowNull: false,
                 },
             },
             {
                 sequelize: sequelizeInstance,
                 modelName: 'Client',
-                timestamps: false,
+                tableName: 'clients',
+                underscored: true
             }
         );
 

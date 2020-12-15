@@ -40,12 +40,12 @@
     </div>
 
     <div class="field">
-        {% if car.crestUrl %}
-        <img src="/{{car.crestUrl}}" width="256" height="256" />
+        {% if car.img %}
+        <img src="/{{car.img}}" width="256" height="256" />
         {% endif %}
         <label class="label">Imagen</label>
         <div class="control has-icons-left">
-            <input class="input" type="file" name="crest-url" {{"" if car.crestUrl else "required"}}/>
+            <input class="input" type="file" name="img" {{"" if car.img else "required"}}/>
             <span class=" icon is-small is-left">
                 <i class="fas fa-image"></i>
             </span>

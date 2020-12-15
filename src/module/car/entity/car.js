@@ -3,7 +3,7 @@ module.exports = class Car {
         id,
         brand,
         model,
-        crestUrl,
+        img,
         year,
         kms,
         color,
@@ -15,7 +15,7 @@ module.exports = class Car {
         this.id = id;
         this.brand = brand;
         this.model = model;
-        this.crestUrl = crestUrl;
+        this.img = img;
         this.year = year;
         this.kms = kms;
         this.color = color;

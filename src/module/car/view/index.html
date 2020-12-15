@@ -64,7 +64,7 @@
                 <td>{{car.model}}</td>
                 <td>
                     <figure class="image is-128x128">
-                        <img src="/{{car.crestUrl}}" width="128" height="128" />
+                        <img src="/{{car.img}}" width="128" height="128" />
                     </figure>
                 </td>
                 <td>{{car.year}}</td>
@@ -75,7 +75,7 @@
                 <td>{{car.transmission}}</td>
                 <td>{{car.pricePerDay}}</td>
                 <td>
-                    <a href="/car/view/{{car.id}}"><span class="icon"><i class="fas fa-edit"></i></span>editar</a>
+                    <a href="/car/edit/{{car.id}}"><span class="icon"><i class="fas fa-edit"></i></span>editar</a>
                 </td>
                 <td>
                     <a href="/car/delete/{{car.id}}" class="action-delete" data-id="{{car.id}}"

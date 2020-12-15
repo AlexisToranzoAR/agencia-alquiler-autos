@@ -1,4 +1,4 @@
-const { fromDataToEntity } = require("../mapper/rentalMapper");
+const { fromFormToEntity } = require("../mapper/rentalMapper");
 const RentalIdNotDefinedError = require("./error/rentalIdNotDefinedError");
 const AbstractController = require("../../abstractController");
 
@@ -24,7 +24,7 @@ module.exports = class RentalController extends AbstractController {
 
         app.get(`${ROUTE}`, this.index.bind(this));
         app.get(`${ROUTE}/create`, this.create.bind(this));
-        app.get(`${ROUTE}/view/:id`, this.view.bind(this));
+        app.get(`${ROUTE}/edit/:id`, this.view.bind(this));
         app.post(`${ROUTE}/save`, this.save.bind(this));
         app.get(`${ROUTE}/delete/:id`, this.delete.bind(this));
     }
@@ -86,17 +86,17 @@ module.exports = class RentalController extends AbstractController {
      */
     async save(req, res, next) {
         try {
-            const rental = fromDataToEntity(req.body);
-            const savedRental = await this.rentalService.save(rental, this.carService, this.clientService);
-            /* if (rental.id) {
-                req.session.messages = [
-                    `La renta con id ${rental.id} se actualizó exitosamente`,
-                ];
-            } else {
-                req.session.messages = [
-                    `Se creó la renta con id ${savedRental.id} (${savedRental.Car} ${savedRental.Client})`,
-                ];
-            } */
+            const formData = Object.assign({}, req.body);
+            const { "car-id": carId, "client-id": clientId } = formData;
+
+            formData.car = await this.carService.getById(carId);
+            formData.client = await this.clientService.getById(clientId);
+
+            //formData.status = formData.paid ? reservationStatuses.PAID : reservationStatuses.PENDING;
+
+            const rental = fromFormToEntity(formData);
+            await this.rentalService.save(rental);
+            //await this.reservationService.makeReservation(reservation, formData.car);
             res.redirect("/rental");
         } catch (e) {
             next(e);

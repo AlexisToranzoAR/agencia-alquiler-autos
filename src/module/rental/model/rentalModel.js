@@ -16,36 +16,35 @@ module.exports = class RentalModel extends Model {
                     unique: true,
                 },
                 unitPrice: {
-                    type: DataTypes.INTEGER,
+                    type: DataTypes.FLOAT,
+                    allowNull: false,
                 },
                 sinceDate: {
-                    type: DataTypes.STRING,
+                    type: DataTypes.DATE,
+                    allowNull: false,
                 },
                 untilDate: {
-                    type: DataTypes.STRING,
+                    type: DataTypes.DATE,
+                    allowNull: false,
                 },
                 totalPrice: {
-                    type: DataTypes.INTEGER,
+                    type: DataTypes.FLOAT,
+                    allowNull: false,
                 },
                 paymentMethod: {
                     type: DataTypes.STRING,
+                    allowNull: false,
                 },
                 paid: {
-                    type: DataTypes.STRING,
-                },
-                lastUpdated: {
-                    type: DataTypes.DATE,
-                    defaultValue: Sequelize.NOW,
-                },
-                createdAt: {
-                    type: DataTypes.DATE,
-                    defaultValue: Sequelize.NOW,
+                    type: DataTypes.BOOLEAN,
+                    allowNull: false,
                 },
             },
             {
                 sequelize: sequelizeInstance,
                 modelName: 'Rental',
-                timestamps: false,
+                tableName: 'rentals',
+                underscored: true
             }
         );
 
@@ -57,8 +56,10 @@ module.exports = class RentalModel extends Model {
      * @param {import('../../client/model/clientModel')} ClientModel
      */
     static setupAssociations(CarModel, ClientModel) {
-        RentalModel.belongsTo(CarModel, { foreignKey: 'car_id' });
-        RentalModel.belongsTo(ClientModel, { foreignKey: 'client_id' });
+        CarModel.hasMany(RentalModel, { foreignKey: 'carId', constraints: false });
+        RentalModel.belongsTo(CarModel, { foreignKey: 'carId', constraints: false });
+        ClientModel.hasMany(RentalModel, { foreignKey: 'clientId', constraints: false });
+        RentalModel.belongsTo(ClientModel, { foreignKey: 'clientId', constraints: false });
 
         return RentalModel;
     }

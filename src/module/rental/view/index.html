@@ -59,15 +59,15 @@
             <tr>
                 <td>{{rental.id}}</td>
                 <td>{{rental.unitPrice}}</td>
-                <td><a href="/car">{{rental.Car.brand}} {{rental.Car.model}}</a></td>
-                <td><a href="/client">{{rental.Client.names}} {{rental.Client.lastNames}}</a></td>
+                <td><a href="/car">{{rental.car.brand}} {{rental.car.model}}</a></td>
+                <td><a href="/client">{{rental.client.names}} {{rental.client.lastNames}}</a></td>
                 <td>{{rental.sinceDate}}</td>
                 <td>{{rental.untilDate}}</td>
                 <td>{{rental.totalPrice}}</td>
                 <td>{{rental.paymentMethod}}</td>
                 <td>{{"Si" if rental.paid == "1" else "No"}}</td>
                 <td>
-                    <a href="/rental/view/{{rental.id}}"><span class="icon"><i class="fas fa-edit"></i></span>editar</a>
+                    <a href="/rental/edit/{{rental.id}}"><span class="icon"><i class="fas fa-edit"></i></span>editar</a>
                 </td>
                 <td>
                     <a href="/rental/delete/{{rental.id}}" class="action-delete" data-id="{{rental.id}}"

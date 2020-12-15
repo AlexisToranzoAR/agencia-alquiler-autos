@@ -20,7 +20,7 @@ module.exports = class ClientController extends AbstractController {
 
         app.get(`${ROUTE}`, this.index.bind(this));
         app.get(`${ROUTE}/create`, this.create.bind(this));
-        app.get(`${ROUTE}/view/:id`, this.view.bind(this));
+        app.get(`${ROUTE}/edit/:id`, this.view.bind(this));
         app.post(`${ROUTE}/save`, this.save.bind(this));
         app.get(`${ROUTE}/delete/:id`, this.delete.bind(this));
     }

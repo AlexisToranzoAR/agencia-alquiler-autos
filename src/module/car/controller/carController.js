@@ -20,8 +20,9 @@ module.exports = class CarController extends AbstractController {
     const ROUTE = this.ROUTE_BASE;
 
     app.get(`${ROUTE}`, this.index.bind(this));
+    app.get(`${ROUTE}/view/:id`, this.view.bind(this))
     app.get(`${ROUTE}/create`, this.create.bind(this));
-    app.get(`${ROUTE}/edit/:id`, this.view.bind(this));
+    app.get(`${ROUTE}/edit/:id`, this.edit.bind(this));
     app.post(`${ROUTE}/save`, this.uploadMiddleware.single('img'), this.save.bind(this));
     app.get(`${ROUTE}/delete/:id`, this.delete.bind(this));
   }
@@ -32,15 +33,7 @@ module.exports = class CarController extends AbstractController {
    */
   async index(req, res) {
     const cars = await this.carService.getAll();
-    res.render('car/view/index.html', { data: { cars } });
-  }
-
-  /**
-   * @param {import('express').Request} req
-   * @param {import('express').Response} res
-   */
-  async create(req, res) {
-    res.render('car/view/form.html');
+    res.render('car/view/index.html', { cars });
   }
 
   /**
@@ -55,7 +48,33 @@ module.exports = class CarController extends AbstractController {
 
     try {
       const car = await this.carService.getById(id);
-      res.render('car/view/form.html', { data: { car } });
+      res.render('car/view/view.html', { car });
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  /**
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   */
+  async create(req, res) {
+    res.render('car/view/form.html');
+  }
+
+  /**
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   */
+  async edit(req, res, next) {
+    const { id } = req.params;
+    if (!id) {
+      throw new CarIdNotDefinedError();
+    }
+
+    try {
+      const car = await this.carService.getById(id);
+      res.render('car/view/form.html', { car });
     } catch (e) {
       next(e);
     }

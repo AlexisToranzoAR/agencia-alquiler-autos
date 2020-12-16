@@ -58,7 +58,7 @@ module.exports = class RentalRepository extends AbstractRentalRepository {
             throw new RentalNotFoundError(`No se encontró el alquiler con id ${id}`);
         }
 
-        return fromModelToEntity(rentalModel);
+        return fromModelToEntity(rentalModel, fromCarModelToEntity, fromClientModelToEntity);
     }
 
     /**
@@ -71,7 +71,7 @@ module.exports = class RentalRepository extends AbstractRentalRepository {
                 {model: this.clientModel, paranoid: false}
             ],
         });
-        console.log(rentals.map(r => fromModelToEntity(r, fromCarModelToEntity, fromClientModelToEntity)))
+
         return rentals.map(r => fromModelToEntity(r, fromCarModelToEntity, fromClientModelToEntity));
 
     }

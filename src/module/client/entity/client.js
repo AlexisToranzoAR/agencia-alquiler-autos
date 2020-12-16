@@ -10,6 +10,8 @@ module.exports = class Client {
         phone,
         email,
         birthdate,
+        createdAt,
+        updatedAt,
     }) {
         this.id = id;
         this.names = names;
@@ -21,5 +23,7 @@ module.exports = class Client {
         this.phone = phone;
         this.email = email;
         this.birthdate = birthdate;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 }

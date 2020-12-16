@@ -1,0 +1,101 @@
+{% extends 'view/layout/base.html' %} {% block body %}
+<h1 class="title is-1">{{ car.brand }} {{ car.model }} {{ car.year }}</h1>
+
+<div class="table-container">
+  <div class="container">
+    <div class="columns">
+      <div class="column">
+        <table class="table">
+          <tbody>
+            <tr>
+              <th>ID</th>
+              <td>{{ car.id }}</td>
+            </tr>
+            <tr>
+              <th>Marca</th>
+              <td>{{ car.brand }}</td>
+            </tr>
+            <tr>
+              <th>Modelo</th>
+              <td>{{ car.model }}</td>
+            </tr>
+            <tr>
+              <th>Año</th>
+              <td>{{ car.year }}</td>
+            </tr>
+            <tr>
+              <th>Kilometraje</th>
+              <td>{{ car.kms }} kms</td>
+            </tr>
+            <tr>
+              <th>Color</th>
+              <td>{{ car.color }}</td>
+            </tr>
+            <tr>
+              <th>Aire acondicionado (si/no)</th>
+              <td>{{ car.airConditioning }}</td>
+            </tr>
+            <tr>
+              <th>Max pasajeros</th>
+              <td>{{ car.passengers }}</td>
+            </tr>
+            <tr>
+              <th>Transmisión</th>
+              <td>{{ car.transmission }}</td>
+            </tr>
+            <tr>
+              <th>Precio diario</th>
+              <td>$ {{ car.pricePerDay }}</td>
+            </tr>
+            <tr>
+              <th>Creado</th>
+              <td>{{ car.createdAt }}</td>
+            </tr>
+            <tr>
+              <th>Modificado</th>
+              <td>{{ car.updatedAt }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="buttons">
+          <a class="button is-link is-outlined" href="{{ '/car/edit/' + car.id }}">
+            <span>Editar</span>
+            <span class="icon is-small">
+              <i class="fas fa-edit"></i>
+            </span>
+          </a>
+          <a href="/car/delete/{{car.id}}" class="action-delete button is-danger is-outlined delete-button" data-id="{{car.id}}"
+            data-brand="{{car.brand}}" data-model="{{car.model}}">
+            <span>Borrar</span>
+            <span class="icon"><i class="fas fa-trash"></i></span>
+          </a>
+          <a class="button is-success is-outlined" href="/car">
+            <span>Volver</span>
+            <span class="icon is-small">
+              <i class="fas fa-arrow-left"></i>
+            </span>
+          </a>
+        </div>
+      </div>
+      <div class="column">
+        <div class="tile is-parent">
+          <article class="tile is-child notification is-info is-light">
+            <div class="content">
+              <div class="content">
+                <img
+                  src="{{"/" + car.img if car.img else '/img/no-image-available.jpg' }}"
+                  alt="car-image"
+                />
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block footerScripts %}
+<script src="/public/js/car.index.js"></script>
+{% endblock %}

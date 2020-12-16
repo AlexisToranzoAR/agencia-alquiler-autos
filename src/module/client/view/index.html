@@ -1,89 +1,64 @@
 {% extends 'view/layout/base.html' %}
 
 {% block body %}
-<h1 class="title is-1">Índice de clientes</h1>
+    <h1 class="title is-1">Índice de clientes</h1>
 
-{% for error in errors %}
+    <nav class="level-right">
+        <div class="level-item">
+            <a class="button is-success is-medium is-outlined" href="/client/create">
+                <span>Agregar</span>
+                <span class="icon is-small">
+                    <i class="fas fa-plus"></i>
+                </span>
+            </a>
+        </div>
+    </nav>
 
-<div class="notification is-danger">
-    {{error}}
-</div>
-{% endfor %}
+    <div class="table-container">
+        <table class="table is-striped is-hoverable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Tipo de <abbr title="Documento">Doc.</abbr>
+                    </th>
+                    <th>Numero de <abbr title="Documento">Doc.</abbr>
+                    </th>
+                    <th>Nacionalidad</th>
+                    <th>Dirección</th>
+                    <th>Telefono</th>
+                    <th>Email</th>
+                    <th>Fecha de <abbr title="Nacimiento">Nac.</abbr>
+                    </th>
+                </tr>
+            </thead>
+            
+            <tbody>
+                {% for client in data.clients %}
 
-{% for message in messages %}
-<div class="notification is-success">
-    {{message}}
-</div>
-
-{% endfor %}
-<nav class="level-right">
-    <div class="level-item">
-        <a href="/client/create" class="button is-primary is-large">
-            <span class="icon"><i class="fas fa-users"></i></span>
-            <span>Agregar</span>
-        </a>
+                    <tr>
+                        <td>{{client.id}}</td>
+                        <td>{{client.names}}</td>
+                        <td>{{client.lastNames}}</td>
+                        <td>{{client.documentType}}</td>
+                        <td>{{client.documentNumber}}</td>
+                        <td>{{client.nacionality}}</td>
+                        <td>{{client.address}}</td>
+                        <td>{{client.phone}}</td>
+                        <td>{{client.email}}</td>
+                        <td>{{client.birthdate}}</td>
+                        <td>
+                            <a class="button is-link is-outlined" href="{{ '/client/view/' + client.id }}">
+                                <span>Ver</span>
+                                <span class="icon is-small">
+                                    <i class="fas fa-eye"></i>
+                                </span>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
-</nav>
-
-<div class="table-container">
-    <table class="table is-striped is-hoverable">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>Tipo de <abbr title="Documento">Doc.</abbr></th>
-                <th>Numero de <abbr title="Documento">Doc.</abbr></th>
-                <th>Nacionalidad</th>
-                <th>Dirección</th>
-                <th>Telefono</th>
-                <th>Email</th>
-                <th>Fecha de <abbr title="Nacimiento">Nac.</abbr></th>
-            </tr>
-        </thead>
-        <!-- el tfoot va después del thead en caso de que el contenido sea muy largo -->
-        <tfoot>
-            <tr>
-                <th colspan="14">
-                    <div class="level-right">
-                        <a href="/client/create" class="button is-primary is-large">
-                            <span class="icon"><i class="fas fa-users"></i></span>
-                            <span>Agregar</span>
-                        </a>
-                    </div>
-                </th>
-            </tr>
-        </tfoot>
-        <tbody>
-            {% for client in data.clients %}
-
-            <tr>
-                <td>{{client.id}}</td>
-                <td>{{client.names}}</td>
-                <td>{{client.lastNames}}</td>
-                <td>{{client.documentType}}</td>
-                <td>{{client.documentNumber}}</td>
-                <td>{{client.nacionality}}</td>
-                <td>{{client.address}}</td>
-                <td>{{client.phone}}</td>
-                <td>{{client.email}}</td>
-                <td>{{client.birthdate}}</td>
-                <td>
-                    <a href="/client/edit/{{client.id}}"><span class="icon"><i class="fas fa-edit"></i></span>editar</a>
-                </td>
-                <td>
-                    <a href="/client/delete/{{client.id}}" class="action-delete" data-id="{{client.id}}"
-                        data-names="{{client.names}}" data-last-names="{{client.lastNames}}">
-                        <span class="icon"><i class="fas fa-trash"></i></span>eliminar
-                    </a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
-{% endblock %}
-
-{% block footerScripts %}
-<script src="/public/js/client.index.js"></script>
 {% endblock %}

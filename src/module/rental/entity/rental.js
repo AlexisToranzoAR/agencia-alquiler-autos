@@ -33,6 +33,7 @@ module.exports = class Rental {
         this.unitPrice = unitPrice;
         this.sinceDate = new Date(sinceDate);
         this.untilDate = new Date(untilDate);
+        this.formattedDates = this.formatDate();
         this.totalPrice = totalPrice;
         this.paymentMethod = paymentMethod;
         this.paid = paid;
@@ -42,5 +43,18 @@ module.exports = class Rental {
         this.updatedAt = updatedAt;
         this.car = car;
         this.client = client;
+    }
+
+    formatDate() {
+        const [sinceDate, untilDate] = [this.sinceDate, this.untilDate].map((date) =>
+          new Date(date).toLocaleString(false, {
+            year: 'numeric',
+            month: 'numeric',
+            day: 'numeric',
+            //hour: 'numeric',
+            //minute: 'numeric',
+          })
+        );
+        return { sinceDate, untilDate };
     }
 }

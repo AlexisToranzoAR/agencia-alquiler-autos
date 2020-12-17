@@ -25,7 +25,7 @@
                 <select id="car-options" name="car-id">
                     <option value="0" {{"selected" if rental.id}}>Seleccione</option>
                     {% for car in cars %}
-                    <option value="{{car.id}}" {{"selected" if car.id == rental.Car.id}} {{"data-car-value=" + car.pricePerDay}}>
+                    <option value="{{car.id}}" {{"selected" if car.id == rental.car.id}} {{"data-car-value=" + car.pricePerDay}}>
                         {{car.brand + " " + car.model + " - Precio por dia $" + car.pricePerDay}}</option>
                     {% endfor %}
                 </select>
@@ -43,7 +43,7 @@
                 <select name="client-id">
                     <option value="0" {{"selected" if rental.id}}>Seleccione</option>
                     {% for client in clients %}
-                    <option value="{{client.id}}" {{"selected" if client.id == rental.Client.id}}>
+                    <option value="{{client.id}}" {{"selected" if client.id == rental.client.id}}>
                         {{client.names + " " + client.lastNames + " - " + client.documentType + " : " + client.documentNumber}}</option>
                     {% endfor %}
                 </select>
@@ -67,7 +67,7 @@
     <div class="field">
         <label class="label">Desde</label>
         <div class="control has-icons-left">
-            <input id="since-date-input" class="input" name="since-date" type="date" value="{{rental.sinceDate}}">
+            <input id="since-date-input" class="input" name="since-date" type="datetime-local" value="{{rental.sinceDate.toISOString() | truncate(16, true, "") if rental}}">
             <span class="icon is-small is-left">
                 <i class="fas fa-calendar"></i>
             </span>
@@ -77,7 +77,7 @@
     <div class="field">
         <label class="label">Hasta</label>
         <div class="control has-icons-left">
-            <input id="until-date-input" class="input" name="until-date" type="date" value="{{rental.untilDate}}">
+            <input id="until-date-input" class="input" name="until-date" type="datetime-local" value="{{rental.untilDate.toISOString() | truncate(16, true, "") if rental}}">
             <span class="icon is-small is-left">
                 <i class="fas fa-calendar"></i>
             </span>

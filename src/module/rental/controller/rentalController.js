@@ -98,6 +98,7 @@ module.exports = class RentalController extends AbstractController {
       const rental = await this.rentalService.getById(id);
       const cars = await this.carService.getAll();
       const clients = await this.clientService.getAll();
+      console.log(rental)
       res.render("rental/view/form.html", { rental, cars, clients });
     } catch (e) {
       next(e);

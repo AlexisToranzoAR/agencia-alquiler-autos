@@ -35,7 +35,7 @@
                 {% for rental in rentals %}
                     <tr>
                         <td>{{rental.id}}</td>
-                        <td>{{rental.unitPrice}}</td>
+                        <td>${{rental.unitPrice}}</td>
                         <td>
                             <a href="/car/view/{{rental.carId}}">{{rental.car.brand}}
                                 {{rental.car.model}}</a>
@@ -44,8 +44,8 @@
                             <a href="/client/view/{{rental.clientId}}">{{rental.client.names}}
                                 {{rental.client.lastNames}}</a>
                         </td>
-                        <td>{{rental.sinceDate}}</td>
-                        <td>{{rental.untilDate}}</td>
+                        <td>{{rental.formattedDates.sinceDate}}</td>
+                        <td>{{rental.formattedDates.untilDate}}</td>
                         <td>${{rental.totalPrice}}</td>
                         <td>{{rental.paymentMethod}}</td>
                         <td>{{"Si" if rental.paid else "No"}}</td>

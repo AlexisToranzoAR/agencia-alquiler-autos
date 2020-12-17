@@ -56,7 +56,8 @@ module.exports = class ClientModel extends Model {
                 sequelize: sequelizeInstance,
                 modelName: 'Client',
                 tableName: 'clients',
-                underscored: true
+                underscored: true,
+                paranoid: true
             }
         );
 

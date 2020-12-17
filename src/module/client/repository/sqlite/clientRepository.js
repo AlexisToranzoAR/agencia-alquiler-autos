@@ -48,7 +48,7 @@ module.exports = class ClientRepository extends AbstractClientRepository {
         });
 
         if (!clientModel) {
-            throw new ClientNotFoundError(`No se encontro el cliente con id ${id}`);
+            throw new ClientNotFoundError(`No se encontro el cliente con ID ${id} puede que alla sido borrado`);
         }
 
         return fromModelToEntity(clientModel)

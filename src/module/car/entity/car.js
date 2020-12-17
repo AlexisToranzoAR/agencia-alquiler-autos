@@ -13,6 +13,7 @@ module.exports = class Car {
         pricePerDay,
         createdAt,
         updatedAt,
+        deletedAt,
     }) {
         this.id = id;
         this.brand = brand;
@@ -27,5 +28,6 @@ module.exports = class Car {
         this.pricePerDay = pricePerDay;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.deletedAt = deletedAt;
     }
 };

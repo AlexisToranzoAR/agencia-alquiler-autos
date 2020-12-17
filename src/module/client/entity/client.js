@@ -12,6 +12,7 @@ module.exports = class Client {
         birthdate,
         createdAt,
         updatedAt,
+        deletedAt,
     }) {
         this.id = id;
         this.names = names;
@@ -25,5 +26,6 @@ module.exports = class Client {
         this.birthdate = birthdate;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.deletedAt = deletedAt;
     }
 }

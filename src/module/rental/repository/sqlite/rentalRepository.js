@@ -49,13 +49,15 @@ module.exports = class RentalRepository extends AbstractRentalRepository {
      * @returns {Promise<import('../../entity/rental')>}
      */
     async getById(id) {
-        const rentalModel = await this.rentalModel.findOne({
-            where: { id },
-            include: [this.carModel, this.clientModel],
+        const rentalModel = await this.rentalModel.findByPk(id, {
+            include: [
+                {model: this.carModel, paranoid: false},
+                {model: this.clientModel, paranoid: false},
+            ],
         });
 
         if (!rentalModel) {
-            throw new RentalNotFoundError(`No se encontró el alquiler con id ${id}`);
+            throw new RentalNotFoundError(`No se encontró el alquiler con ID ${id}`);
         }
 
         return fromModelToEntity(rentalModel, fromCarModelToEntity, fromClientModelToEntity);

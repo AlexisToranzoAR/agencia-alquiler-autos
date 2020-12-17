@@ -44,7 +44,8 @@ module.exports = class RentalModel extends Model {
                 sequelize: sequelizeInstance,
                 modelName: 'Rental',
                 tableName: 'rentals',
-                underscored: true
+                underscored: true,
+                paranoid: true
             }
         );
 

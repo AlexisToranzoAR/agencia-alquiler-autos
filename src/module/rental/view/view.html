@@ -39,15 +39,15 @@
                 <td>{{"Si" if rental.paid else "No"}}</td>
               </tr>
               <tr>
-                <th>ID del auto</th>
+                <th>Auto</th>
                 <td>
-                  <a href="/car/view/{{ rental.carId }}" title="Ver auto">{{ rental.carId }} ({{ rental.car.brand }} {{ rental.car.model }})</a>
+                  <a href="/car/view/{{ rental.carId }}" title="Ver auto">{{ rental.car.brand }} {{ rental.car.model }} {{ "*Eliminado*" if rental.car.deletedAt }}</a>
                 </td>
               </tr>
               <tr>
-                <th>ID del cliente</th>
+                <th>Cliente</th>
                 <td>
-                  <a href="/client/view/{{ rental.clientId }}" title="Ver cliente">{{ rental.clientId }} ({{ rental.client.names }} {{ rental.client.lastNames }})</a>
+                  <a href="/client/view/{{ rental.clientId }}" title="Ver cliente">{{ rental.client.names }} {{ rental.client.lastNames }} {{ "*Eliminado*" if rental.client.deletedAt }}</a>
                 </td>
               </tr>
               <tr>

@@ -1,3 +1,5 @@
+const { statuses } = require('./rentalStatus');
+
 module.exports = class Rental {
     /**
    * @param {number} id
@@ -6,7 +8,7 @@ module.exports = class Rental {
    * @param {string} untilDate
    * @param {number} totalPrice
    * @param {string} paymentMethod
-   * @param {boolean} paid
+   * @param @param {import('./rentalStatus').RentalStatus} status
    * @param {number} carId
    * @param {number} userId
    * @param {string} createdAt
@@ -21,7 +23,7 @@ module.exports = class Rental {
         untilDate,
         totalPrice,
         paymentMethod,
-        paid,
+        status,
         carId,
         clientId,
         createdAt,
@@ -36,7 +38,7 @@ module.exports = class Rental {
         this.formattedDates = this.formatDate();
         this.totalPrice = totalPrice;
         this.paymentMethod = paymentMethod;
-        this.paid = paid;
+        this.status = status;
         this.carId = carId;
         this.clientId = clientId;
         this.createdAt = createdAt;
@@ -56,5 +58,43 @@ module.exports = class Rental {
           })
         );
         return { sinceDate, untilDate };
+    }
+
+    calculateRentalLength() {
+      const MILISECONDS_IN_A_DAY = 86400000;
+      const sinceDate = new Date(this.sinceDate).getTime();
+      const untilDate = new Date(this.untilDate).getTime();
+      return Math.ceil((sinceDate - untilDate) / MILISECONDS_IN_A_DAY);
+    }
+  
+    /**
+     * @param {import('../../car/entity/car')} car
+     */
+    reserve(car) {
+      this.unitPrice = this.unitPrice || car.pricePerDay;
+      this.totalPrice = this.unitPrice * this.calculateReservationLength();
+      return this;
+    }
+  
+    pay() {
+      this.status = statuses.PAID;
+      return this;
+    }
+  
+    finish() {
+      if (this.paid !== true) {
+        throw new Error("El alquiler no puede finalizarse porque no está pago.")
+      }
+  
+      this.status = statuses.FINISHED;
+      return this;
+    }
+  
+    unblock() {
+      this.status = statuses.PENDING;
+    }
+  
+    get paid(){
+      return this.status.value === statuses.PAID.value;
     }
 }

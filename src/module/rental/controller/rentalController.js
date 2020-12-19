@@ -1,6 +1,7 @@
-const { fromFormToEntity } = require("../mapper/rentalMapper");
-const RentalIdNotDefinedError = require("./error/rentalIdNotDefinedError");
-const AbstractController = require("../../abstractController");
+const { fromFormToEntity } = require('../mapper/rentalMapper');
+const { statuses: rentalStatuses } = require('../entity/rentalStatus');
+const RentalIdNotDefinedError = require('./error/rentalIdNotDefinedError');
+const AbstractController = require('../../abstractController');
 
 module.exports = class RentalController extends AbstractController {
   /**
@@ -10,7 +11,7 @@ module.exports = class RentalController extends AbstractController {
    */
   constructor(rentalService, carService, clientService) {
     super();
-    this.ROUTE_BASE = "/rental";
+    this.ROUTE_BASE = '/rental';
     this.rentalService = rentalService;
     this.carService = carService;
     this.clientService = clientService;
@@ -27,21 +28,30 @@ module.exports = class RentalController extends AbstractController {
     app.get(`${ROUTE}/create`, this.create.bind(this));
     app.get(`${ROUTE}/edit/:id`, this.edit.bind(this));
     app.post(`${ROUTE}/save`, this.save.bind(this));
+    app.post(`${ROUTE}/unblock/:id`, this.unblock.bind(this));
+    app.post(`${ROUTE}/pay/:id`, this.pay.bind(this));
+    app.post(`${ROUTE}/finish/:id`, this.finish.bind(this));
     app.get(`${ROUTE}/delete/:id`, this.delete.bind(this));
   }
 
   /**
    * @param {import('express').Request} req
    * @param {import('express').Response} res
+   * @param {import('express').NextFunction} next
    */
-  async index(req, res) {
-    const rentals = await this.rentalService.getAll();
-    res.render("rental/view/index.html", { rentals });
+  async index(req, res, next) {
+    try {
+      const rentals = await this.rentalService.getAll();
+      res.render('rental/view/index.html', { rentals });
+    } catch (e) {
+      next(e);
+    }
   }
 
   /**
    * @param {import('express').Request} req
    * @param {import('express').Response} res
+   * @param {import('express').NextFunction} next
    */
   async view(req, res, next) {
     const { id } = req.params;
@@ -51,7 +61,7 @@ module.exports = class RentalController extends AbstractController {
 
     try {
       const rental = await this.rentalService.getById(id);
-      res.render("rental/view/view.html", { rental });
+      res.render('rental/view/view.html', { rental });
     } catch (e) {
       next(e);
     }
@@ -60,6 +70,7 @@ module.exports = class RentalController extends AbstractController {
   /**
    * @param {import('express').Request} req
    * @param {import('express').Response} res
+   * @param {import('express').NextFunction} next
    */
   async create(req, res, next) {
     try {
@@ -67,16 +78,14 @@ module.exports = class RentalController extends AbstractController {
       const clients = await this.clientService.getAll();
 
       if (cars.length > 0 && clients.length > 0) {
-        res.render("rental/view/form.html", { cars, clients });
+        res.render('rental/view/form.html', { cars, clients });
       } else if (!cars.length > 0 && !clients.length > 0) {
-        throw new Error(
-          "Para crear un alquiler, primero debe crear un auto y un cliente"
-        );
+        throw new Error('Para crear un alquiler, primero debe crear un auto y un cliente');
       } else {
         const error =
           cars.length > 0
-            ? "Para crear un alquiler, primero debe crear un cliente"
-            : "Para crear un alquiler, primero debe crear un auto";
+            ? 'Para crear un alquiler, primero debe crear un cliente'
+            : 'Para crear un alquiler, primero debe crear un auto';
         throw new Error(error);
       }
     } catch (e) {
@@ -87,19 +96,19 @@ module.exports = class RentalController extends AbstractController {
   /**
    * @param {import('express').Request} req
    * @param {import('express').Response} res
+   * @param {import('express').NextFunction} next
    */
   async edit(req, res, next) {
-    const { id } = req.params;
-    if (!id) {
-      throw new RentalIdNotDefinedError();
-    }
-
     try {
+      const { id } = req.params;
+      if (!id) {
+        throw new RentalIdNotDefinedError();
+      }
+
       const rental = await this.rentalService.getById(id);
       const cars = await this.carService.getAll();
       const clients = await this.clientService.getAll();
-      console.log(rental)
-      res.render("rental/view/form.html", { rental, cars, clients });
+      res.render('rental/view/form.html', { rental, cars, clients });
     } catch (e) {
       next(e);
     }
@@ -108,21 +117,19 @@ module.exports = class RentalController extends AbstractController {
   /**
    * @param {import('express').Request} req
    * @param {import('express').Response} res
+   * @param {import('express').NextFunction} next
    */
   async save(req, res, next) {
     try {
       const formData = Object.assign({}, req.body);
-      const { "car-id": carId, "client-id": clientId } = formData;
-
+      const { 'car-id': carId, 'client-id': clientId } = formData;
       formData.car = await this.carService.getById(carId);
       formData.client = await this.clientService.getById(clientId);
-
-      //formData.status = formData.paid ? reservationStatuses.PAID : reservationStatuses.PENDING;
+      formData.status = formData.paid ? rentalStatuses.PAID : rentalStatuses.PENDING;
 
       const rental = fromFormToEntity(formData);
-      await this.rentalService.save(rental);
-      //await this.reservationService.makeReservation(reservation, formData.car);
-      res.redirect("/rental");
+      await this.rentalService.makeRental(rental, formData.car);
+      res.redirect('/rental');
     } catch (e) {
       next(e);
     }
@@ -131,16 +138,78 @@ module.exports = class RentalController extends AbstractController {
   /**
    * @param {import('express').Request} req
    * @param {import('express').Response} res
+   * @param {import('express').NextFunction} next
+   */
+  async unblock(req, res, next) {
+    try {
+      const { id } = req.params;
+      if (!id) {
+        throw new RentalIdNotDefinedError();
+      }
+
+      const rental = await this.rentalService.getById(id);
+      await this.rentalService.unblock(rental);
+      res.redirect('/rental');
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  /**
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   * @param {import('express').NextFunction} next
+   */
+  async pay(req, res, next) {
+    try {
+      const { id } = req.params;
+      if (!id) {
+        throw new RentalIdNotDefinedError();
+      }
+
+      const rental = await this.rentalService.getById(id);
+      await this.rentalService.pay(rental);
+      res.redirect('/rental');
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  /**
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   * @param {import('express').NextFunction} next
+   */
+  async finish(req, res, next) {
+    try {
+      const { id } = req.params;
+      if (!id) {
+        throw new RentalIdNotDefinedError();
+      }
+
+      const rental = await this.rentalService.getById(id);
+      await this.rentalService.finish(rental);
+      res.redirect('/rental');
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  /**
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   * @param {import('express').NextFunction} next
    */
   async delete(req, res, next) {
     try {
       const { id } = req.params;
+      if (!id) {
+        throw new RentalIdNotDefinedError();
+      }
+
       const rental = await this.rentalService.getById(id);
       await this.rentalService.delete(rental);
-      /* req.session.messages = [
-                `Se eliminó la renta con id ${id} (${rental.Car} ${rental.Client})`,
-            ]; */
-      res.redirect("/rental");
+      res.redirect('/rental');
     } catch (e) {
       next(e);
     }

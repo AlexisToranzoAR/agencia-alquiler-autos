@@ -1,75 +1,88 @@
 const RentalNotDefinedError = require('./error/rentalNotDefinedError');
+const CarNotDefinedError = require('../../car/service/error/carNotDefinedError');
 const RentalIdNotDefinedError = require('./error/rentalIdNotDefinedError');
 const Rental = require('../entity/rental');
 
 module.exports = class Service {
-    /**
-     *
-     * @param {AbstractRentalRepository} rentalRepository
-     */
-    constructor(rentalRepository) {
-        this.rentalRepository = rentalRepository;
+  /**
+   * @param {import('../repository/sqlite/rentalRepository')} rentalRepository
+   */
+  constructor(rentalRepository) {
+    this.rentalRepository = rentalRepository;
+  }
+
+  /**
+   * @param {import('../entity/rental')} rental
+   * @param {import('../../car/entity/car')} car
+   */
+  async makeReservation(rental, car) {
+    if (!(rental instanceof Rental)) {
+      throw new RentalNotDefinedError();
+    }
+    if (!(car instanceof Car)) {
+      throw new CarNotDefinedError();
     }
 
-    /**
-     * @param {Rental} rental
-     */
-    async save(rental) {
-        if (rental === undefined) {
-            throw new RentalNotDefinedError();
-        }
+    rental.reserve(car);
+    return this.rentalRepository.save(rental);
+  }
 
-        return this.rentalRepository.save(rental);
+  /**
+   * @param {import('../entity/rental')} rental
+   */
+  async unblock(rental) {
+    if (!(rental instanceof Rental)) {
+      throw new RentalNotDefinedError();
     }
 
-    /**
-     * @param {Rental} rental
-     */
-    async delete(rental) {
-        if (!(rental instanceof Rental)) {
-            throw new RentalNotDefinedError();
-        }
+    rental.unblock();
+    return this.rentalRepository.save(rental);
+  }
 
-        return this.rentalRepository.delete(rental);
+  /**
+   * @param {import('../entity/rental')} rental
+   */
+  async pay(rental) {
+    if (!(rental instanceof Rental)) {
+      throw new RentalNotDefinedError();
     }
 
-    async getById(id) {
-        if (id === undefined) {
-            throw new RentalIdNotDefinedError();
-        }
+    rental.pay();
+    return this.rentalRepository.save(rental);
+  }
 
-        return this.rentalRepository.getById(id);
+  /**
+   * @param {import('../entity/rental')} rental
+   */
+  async finish(rental) {
+    if (!(rental instanceof Rental)) {
+      throw new RentalNotDefinedError();
     }
 
-    async getAll() {
-        return this.rentalRepository.getAll();
+    rental.finish();
+    return this.rentalRepository.save(rental);
+  }
+
+  /**
+   * @param {import('../entity/rental')} rental
+   */
+  async delete(rental) {
+    if (!(rental instanceof Rental)) {
+      throw new RentalNotDefinedError();
     }
+
+    return this.rentalRepository.delete(rental);
+  }
+
+  async getById(id) {
+    if (id === undefined) {
+      throw new RentalIdNotDefinedError();
+    }
+
+    return this.rentalRepository.getById(id);
+  }
+
+  async getAll() {
+    return this.rentalRepository.getAll();
+  }
 };
-
-/* function unitPriceValidation(rental, carService) {
-    const car = carService.getById(rental.Car.id);
-
-    if (car.pricePerDay !== rental.unitPrice) {
-        throw new RentalUnitPriceError();
-    }
-}
-
-function totalPriceValidation(rental, moment) {
-    const sinceDate = moment(rental.sinceDate);
-    const untilDate = moment(rental.untilDate);
-    const unitPrice = Number(rental.unitPrice);
-
-    const daysDifference = untilDate.diff(sinceDate, 'days');
-    const totalPrice = daysDifference * unitPrice;
-
-    if (totalPrice !== rental.totalPrice) {
-        throw new RentalTotalPriceError();
-    }
-}
-
-function rejectRepeat(rental, rentals) {
-    
-
-    //consultar por la tabla rental
-
-} */

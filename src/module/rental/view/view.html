@@ -1,91 +1,108 @@
-{% extends 'view/layout/base.html' %}
-{% block body %}
-  <h1 class="title is-1">{{ rental.client.names }}
-    {{ rental.client.lastNames }} - {{ rental.car.brand }}
-    {{ rental.car.model }}</h1>
+{% extends 'view/layout/base.html' %} {% block body %}
+<h1 class="title is-1">
+  {{ rental.client.names }} {{ rental.client.lastNames }} - {{ rental.car.brand }} {{
+  rental.car.model }}
+</h1>
 
-  <div class="table-container">
-    <div class="container">
-      <div class="columns">
-        <div class="column">
-          <table class="table">
-            <tbody>
-              <tr>
-                <th>ID</th>
-                <td>{{ rental.id }}</td>
-              </tr>
-              <tr>
-                <th>Precio unitario</th>
-                <td>${{ rental.unitPrice }}</td>
-              </tr>
-              <tr>
-                <th>Desde</th>
-                <td>{{ rental.sinceDate }}</td>
-              </tr>
-              <tr>
-                <th>Hasta</th>
-                <td>{{ rental.untilDate }}</td>
-              </tr>
-              <tr>
-                <th>Precio Total</th>
-                <td>${{ rental.totalPrice }}</td>
-              </tr>
-              <tr>
-                <th>Metodo de pago</th>
-                <td>{{ rental.paymentMethod }}</td>
-              </tr>
-              <tr>
-                <th>Pago</th>
-                <td>{{"Si" if rental.paid else "No"}}</td>
-              </tr>
-              <tr>
-                <th>Auto</th>
-                <td>
-                  <a href="/car/view/{{ rental.carId }}" title="Ver auto">{{ rental.car.brand }} {{ rental.car.model }} {{ "*Eliminado*" if rental.car.deletedAt }}</a>
-                </td>
-              </tr>
-              <tr>
-                <th>Cliente</th>
-                <td>
-                  <a href="/client/view/{{ rental.clientId }}" title="Ver cliente">{{ rental.client.names }} {{ rental.client.lastNames }} {{ "*Eliminado*" if rental.client.deletedAt }}</a>
-                </td>
-              </tr>
-              <tr>
-                <th>Creado</th>
-                <td>{{ rental.createdAt }}</td>
-              </tr>
-              <tr>
-                <th>Modificado</th>
-                <td>{{ rental.updatedAt }}</td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="buttons">
-            <a class="button is-link is-outlined" href="{{ '/rental/edit/' + rental.id }}">
-              <span>Editar</span>
-              <span class="icon is-small">
-                <i class="fas fa-edit"></i>
-              </span>
-            </a>
-            <a href="/rental/delete/{{rental.id}}" class="action-delete button is-danger is-outlined delete-button" data-id="{{rental.id}}"
-              data-car="{{rental.car}}" data-client="{{rental.client}}">
-              <span>Borrar</span>
-              <span class="icon">
-                <i class="fas fa-trash"></i>
-              </span>
-            </a>
-            <a class="button is-success is-outlined" href="/rental">
-              <span>Volver</span>
-              <span class="icon is-small">
-                <i class="fas fa-arrow-left"></i>
-              </span>
-            </a>
-          </div>
+<div class="table-container">
+  <div class="container">
+    <div class="columns">
+      <div class="column">
+        <table class="table">
+          <tbody>
+            <tr>
+              <th>ID</th>
+              <td>{{ rental.id }}</td>
+            </tr>
+            <tr>
+              <th>Precio unitario</th>
+              <td>${{ rental.unitPrice }}</td>
+            </tr>
+            <tr>
+              <th>Desde</th>
+              <td>{{ rental.sinceDate }}</td>
+            </tr>
+            <tr>
+              <th>Hasta</th>
+              <td>{{ rental.untilDate }}</td>
+            </tr>
+            <tr>
+              <th>Precio Total</th>
+              <td>${{ rental.totalPrice }}</td>
+            </tr>
+            <tr>
+              <th>Metodo de pago</th>
+              <td>{{ rental.paymentMethod }}</td>
+            </tr>
+            <tr>
+              <th>Pago</th>
+              <td>{{"Si" if rental.paid else "No"}}</td>
+            </tr>
+            <tr>
+              <th>Estado</th>
+              <td>{{ rental.status.name }}</td>
+            </tr>
+            <tr>
+              <th>Auto</th>
+              <td>
+                <a href="/car/view/{{ rental.carId }}" title="Ver auto"
+                  >{{ rental.car.brand }} {{ rental.car.model }} {{ "*Eliminado*" if
+                  rental.car.deletedAt }}</a
+                >
+              </td>
+            </tr>
+            <tr>
+              <th>Cliente</th>
+              <td>
+                <a href="/client/view/{{ rental.clientId }}" title="Ver cliente"
+                  >{{ rental.client.names }} {{ rental.client.lastNames }} {{ "*Eliminado*" if
+                  rental.client.deletedAt }}</a
+                >
+              </td>
+            </tr>
+            <tr>
+              <th>Creado</th>
+              <td>{{ rental.createdAt }}</td>
+            </tr>
+            <tr>
+              <th>Modificado</th>
+              <td>{{ rental.updatedAt }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="buttons">
+          <a class="button is-link is-outlined" href="{{ '/rental/edit/' + rental.id }}">
+            <span>Editar</span>
+            <span class="icon is-small">
+              <i class="fas fa-edit"></i>
+            </span>
+          </a>
+          <a
+            href="/rental/delete/{{rental.id}}"
+            class="action-delete button is-danger is-outlined delete-button"
+            data-id="{{rental.id}}"
+            data-carname="{{rental.car.brand}} {{rental.car.model}}"
+            data-clientname="{{rental.client.names}} {{rental.client.lastNames}}"
+            id="delete-rental"
+          >
+            <span>Borrar</span>
+            <span class="icon">
+              <i class="fas fa-trash"></i>
+            </span>
+          </a>
+          <a class="button is-success is-outlined" href="/rental">
+            <span>Volver</span>
+            <span class="icon is-small">
+              <i class="fas fa-arrow-left"></i>
+            </span>
+          </a>
         </div>
       </div>
     </div>
-  {% endblock %}
+  </div>
+</div>
+{% endblock %}
 
-  {% block footerScripts %}
-    <script src="/public/js/rental.index.js"></script>
-  {% endblock %}
+{% block footerScripts %}
+  <script src="/public/js/rental-view.js"></script>
+{% endblock %}

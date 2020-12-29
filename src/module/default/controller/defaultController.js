@@ -1,3 +1,5 @@
+const { statuses: rentalStatuses } = require('../../rental/entity/rentalStatus');
+
 module.exports = class DefaultController {
   /**
    * @param {import('../../rental/service/rentalService')} rentalService
@@ -21,7 +23,7 @@ module.exports = class DefaultController {
    */
   async index(req, res) {
     const rentals = await this.rentalService.getAll();
-    res.render(`rental/view/index.html`, { rentals });
+    res.render(`rental/view/index.html`, { rentals, rentalStatuses });
   }
 
 };

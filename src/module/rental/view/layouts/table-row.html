@@ -1,0 +1,31 @@
+<tr>
+  <td>{{rental.id}}</td>
+  <td>${{rental.unitPrice}}</td>
+  <td>
+    <a href="/car/view/{{rental.carId}}">{{rental.car.brand}} {{rental.car.model}}</a>
+  </td>
+  <td>
+    <a href="/client/view/{{rental.clientId}}"
+      >{{rental.client.names}} {{rental.client.lastNames}}</a
+    >
+  </td>
+  <td>{{rental.formattedDates.sinceDate}}</td>
+  <td>{{rental.formattedDates.untilDate}}</td>
+  <td>${{rental.totalPrice}}</td>
+  <td>{{rental.paymentMethod}}</td>
+  <td>{{"Si" if rental.paid else "No"}}</td>
+  <td>{{rental.status.name}}</td>
+  <td>
+    {% if rental.status.value == rentalStatuses.PENDING.value %}
+      {% include "rental/view/layouts/status-pending-buttons.html" %}
+    {% endif %}
+
+    {% if rental.status.value == rentalStatuses.PAID.value %}
+      {% include "rental/view/layouts/status-confirmed-buttons.html" %}
+    {% endif %}
+
+    {% if rental.status.value == rentalStatuses.FINISHED.value %}
+      {% include "rental/view/layouts/status-finished-buttons.html" %}
+    {% endif %}
+  </td>
+</tr>

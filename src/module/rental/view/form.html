@@ -107,13 +107,13 @@
     </div>
 
     <div class="control">
-        <label class="label">Pago</label>
+        <label class="label">¿Pago al momento del alquiler?</label>
         <label class="radio">
-            <input type="radio" name="paid" value="1" required {{"checked" if rental.paid == "1"}}>
+            <input type="radio" name="paid" value="true" required {{"checked" if rental.paid}}>
             Si
         </label>
         <label class="radio">
-            <input type="radio" name="paid" value="" {{"checked" if rental.paid == "0"}}>
+            <input type="radio" name="paid" value="" {{"checked" if rental.paid}}>
             No
         </label>
     </div>
@@ -124,5 +124,5 @@
 </form>
 
 <script src="/public/js/moment.js"></script>
-<script src="/public/js/rental.form.js"></script>
+<script src="/public/js/rental-form.js"></script>
 {% endblock %}

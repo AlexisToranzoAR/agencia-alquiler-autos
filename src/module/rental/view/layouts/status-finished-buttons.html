@@ -1,0 +1,25 @@
+<div class="buttons are-small">
+  <a
+    class="action-unblock button is-outlined is-warning"
+    href="/rental/unblock/{{rental.id}}"
+    title="Marcar este alquiler como confirmado"
+    data-id="{{rental.id}}"
+    data-carname="{{rental.car.brand}} {{rental.car.model}}"
+    data-clientname="{{rental.client.names}} {{rental.client.lastNames}}"
+  >
+    <span>Confirmado</span>
+    <span class="icon is-small">
+      <i class="fas fa-unlock"></i>
+    </span>
+  </a>
+  <a
+    class="button is-link is-outlined"
+    href="/rental/view/{{rental.id}}"
+    title="Ver detalles del alquiler"
+  >
+    <span>Ver</span>
+    <span class="icon is-small">
+      <i class="fas fa-eye"></i>
+    </span>
+  </a>
+</div>

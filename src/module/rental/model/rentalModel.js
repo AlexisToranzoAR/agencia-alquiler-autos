@@ -35,8 +35,8 @@ module.exports = class RentalModel extends Model {
                     type: DataTypes.STRING,
                     allowNull: false,
                 },
-                paid: {
-                    type: DataTypes.BOOLEAN,
+                status: {
+                    type: DataTypes.STRING,
                     allowNull: false,
                 },
             },

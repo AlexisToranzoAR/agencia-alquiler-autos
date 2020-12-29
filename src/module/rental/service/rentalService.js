@@ -2,6 +2,7 @@ const RentalNotDefinedError = require('./error/rentalNotDefinedError');
 const CarNotDefinedError = require('../../car/service/error/carNotDefinedError');
 const RentalIdNotDefinedError = require('./error/rentalIdNotDefinedError');
 const Rental = require('../entity/rental');
+const Car = require('../../car/entity/car')
 
 module.exports = class Service {
   /**
@@ -15,7 +16,7 @@ module.exports = class Service {
    * @param {import('../entity/rental')} rental
    * @param {import('../../car/entity/car')} car
    */
-  async makeReservation(rental, car) {
+  async makeRental(rental, car) {
     if (!(rental instanceof Rental)) {
       throw new RentalNotDefinedError();
     }
@@ -58,7 +59,7 @@ module.exports = class Service {
     if (!(rental instanceof Rental)) {
       throw new RentalNotDefinedError();
     }
-
+    
     rental.finish();
     return this.rentalRepository.save(rental);
   }

@@ -64,7 +64,7 @@ module.exports = class Rental {
       const MILISECONDS_IN_A_DAY = 86400000;
       const sinceDate = new Date(this.sinceDate).getTime();
       const untilDate = new Date(this.untilDate).getTime();
-      return Math.ceil((sinceDate - untilDate) / MILISECONDS_IN_A_DAY);
+      return Math.ceil((untilDate - sinceDate) / MILISECONDS_IN_A_DAY);
     }
   
     /**
@@ -72,7 +72,7 @@ module.exports = class Rental {
      */
     reserve(car) {
       this.unitPrice = this.unitPrice || car.pricePerDay;
-      this.totalPrice = this.unitPrice * this.calculateReservationLength();
+      this.totalPrice = this.unitPrice * this.calculateRentalLength();
       return this;
     }
   

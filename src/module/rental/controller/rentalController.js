@@ -28,9 +28,9 @@ module.exports = class RentalController extends AbstractController {
     app.get(`${ROUTE}/create`, this.create.bind(this));
     app.get(`${ROUTE}/edit/:id`, this.edit.bind(this));
     app.post(`${ROUTE}/save`, this.save.bind(this));
-    app.post(`${ROUTE}/unblock/:id`, this.unblock.bind(this));
-    app.post(`${ROUTE}/pay/:id`, this.pay.bind(this));
-    app.post(`${ROUTE}/finish/:id`, this.finish.bind(this));
+    app.get(`${ROUTE}/unblock/:id`, this.unblock.bind(this));
+    app.get(`${ROUTE}/pay/:id`, this.pay.bind(this));
+    app.get(`${ROUTE}/finish/:id`, this.finish.bind(this));
     app.get(`${ROUTE}/delete/:id`, this.delete.bind(this));
   }
 
@@ -42,7 +42,7 @@ module.exports = class RentalController extends AbstractController {
   async index(req, res, next) {
     try {
       const rentals = await this.rentalService.getAll();
-      res.render('rental/view/index.html', { rentals });
+      res.render('rental/view/index.html', { rentals, rentalStatuses });
     } catch (e) {
       next(e);
     }

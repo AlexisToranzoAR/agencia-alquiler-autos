@@ -1,65 +1,41 @@
-{% extends 'view/layout/base.html' %}
+{% extends 'view/layout/base.html' %} {% block body %}
+<h1 class="title is-1">Índice de alquileres</h1>
 
-{% block body %}
-    <h1 class="title is-1">Índice de alquileres</h1>
+<nav class="level-right">
+  <div class="level-item">
+    <a class="button is-success is-medium is-outlined" href="/rental/create">
+      <span>Agregar</span>
+      <span class="icon is-small">
+        <i class="fas fa-plus"></i>
+      </span>
+    </a>
+  </div>
+</nav>
 
-    <nav class="level-right">
-        <div class="level-item">
-            <a class="button is-success is-medium is-outlined" href="/rental/create">
-                <span>Agregar</span>
-                <span class="icon is-small">
-                    <i class="fas fa-plus"></i>
-                </span>
-            </a>
-        </div>
-    </nav>
+<div class="table-container">
+  <table class="table is-striped is-hoverable">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Precio <abbr title="Unitario">Unit.</abbr></th>
+        <th>Auto</th>
+        <th>Cliente</th>
+        <th>Desde</th>
+        <th>Hasta</th>
+        <th>Precio Total</th>
+        <th>Metodo de Pago</th>
+        <th>Pago</th>
+        <th>Estado</th>
+      </tr>
+    </thead>
 
-    <div class="table-container">
-        <table class="table is-striped is-hoverable">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Precio <abbr title="Unitario">Unit.</abbr>
-                    </th>
-                    <th>Auto</th>
-                    <th>Cliente</th>
-                    <th>Desde</th>
-                    <th>Hasta</th>
-                    <th>Precio Total</th>
-                    <th>Metodo de Pago</th>
-                    <th>Pago</th>
-                </tr>
-            </thead>
+    <tbody>
+      {% for rental in rentals %} {% include "rental/view/layouts/table-row.html" %} {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
 
-            <tbody>
-                {% for rental in rentals %}
-                    <tr>
-                        <td>{{rental.id}}</td>
-                        <td>${{rental.unitPrice}}</td>
-                        <td>
-                            <a href="/car/view/{{rental.carId}}">{{rental.car.brand}}
-                                {{rental.car.model}}</a>
-                        </td>
-                        <td>
-                            <a href="/client/view/{{rental.clientId}}">{{rental.client.names}}
-                                {{rental.client.lastNames}}</a>
-                        </td>
-                        <td>{{rental.formattedDates.sinceDate}}</td>
-                        <td>{{rental.formattedDates.untilDate}}</td>
-                        <td>${{rental.totalPrice}}</td>
-                        <td>{{rental.paymentMethod}}</td>
-                        <td>{{"Si" if rental.paid else "No"}}</td>
-                        <td>
-                            <a class="button is-link is-outlined" href="{{ '/rental/view/' + rental.id }}">
-                                <span>Ver</span>
-                                <span class="icon is-small">
-                                    <i class="fas fa-eye"></i>
-                                </span>
-                            </a>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+{% block footerScripts %}
+<script src="/public/js/rental-index.js"></script>
 {% endblock %}
